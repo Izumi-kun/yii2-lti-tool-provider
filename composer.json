@@ -1,0 +1,21 @@
+{
+  "name": "izumi-kun/yii2-lti-tool-provider",
+  "type": "yii2-extension",
+  "require": {
+    "php": "^7.0",
+    "yiisoft/yii2": "~2.0.14",
+    "izumi-kun/lti": "~1.0.0"
+  },
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Viktor Khokhryakov",
+      "email": "viktor.khokhryakov@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "izumi\\yii2lti\\": "src"
+    }
+  }
+}
