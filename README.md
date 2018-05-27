@@ -45,7 +45,7 @@ $config = [
             Yii::$app->session->set('isAdmin', $isAdmin);
             Yii::$app->session->set('userPk', $userPk);
 
-            $this->redirect($isAdmin ? 'site/admin' : 'site/index');
+            $this->redirect($isAdmin ? ['site/admin'] : ['site/index']);
         });
 
         return $module->handleRequest();
