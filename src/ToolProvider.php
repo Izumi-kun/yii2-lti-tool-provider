@@ -9,6 +9,8 @@ namespace izumi\yii2lti;
 
 use IMSGlobal\LTI\ToolProvider\DataConnector\DataConnector_pdo;
 use Yii;
+use yii\db\Connection;
+use yii\di\Instance;
 
 /**
  * ToolProvider
@@ -17,10 +19,15 @@ use Yii;
  */
 class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider
 {
+    /**
+     * @var string|Connection
+     */
+    public $db = 'db';
+
     public function __construct()
     {
-        $db = Yii::$app->getDb();
-        $dataConnector = new DataConnector_pdo($db->getMasterPdo(), $db->tablePrefix);
+        $this->db = Instance::ensure($this->db, Connection::class);
+        $dataConnector = new DataConnector_pdo($this->db->getMasterPdo(), $this->db->tablePrefix);
 
         parent::__construct($dataConnector);
     }
