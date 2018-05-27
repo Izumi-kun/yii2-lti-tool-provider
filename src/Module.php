@@ -34,9 +34,6 @@ class Module extends \yii\base\Module
         parent::init();
 
         $this->toolProvider = Yii::createObject($this->toolProvider);
-        if (empty($this->toolProvider->baseUrl)) {
-            $this->toolProvider->baseUrl = Yii::$app->getRequest()->getHostInfo();
-        }
     }
 
     /**

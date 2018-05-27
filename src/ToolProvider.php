@@ -30,6 +30,10 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider
         $dataConnector = new DataConnector_pdo($this->db->getMasterPdo(), $this->db->tablePrefix);
 
         parent::__construct($dataConnector);
+
+        if (empty($this->baseUrl)) {
+            $this->baseUrl = Yii::$app->getRequest()->getHostInfo();
+        }
     }
 
     /**
