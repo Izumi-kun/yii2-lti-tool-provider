@@ -22,7 +22,7 @@ class ToolProviderEvent extends Event
      * @inheritdoc
      * @param ToolProvider $toolProvider
      */
-    public function __construct(ToolProvider $toolProvider, array $config = [])
+    public function __construct(ToolProvider $toolProvider, $config = [])
     {
         $this->sender = $toolProvider;
 

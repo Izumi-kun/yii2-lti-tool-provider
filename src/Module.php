@@ -24,7 +24,7 @@ class Module extends \yii\base\Module
     /**
      * @var string|array|ToolProvider
      */
-    public $toolProvider = ToolProvider::class;
+    public $toolProvider = '\izumi\yii2lti\ToolProvider';
 
     /**
      * @inheritdoc
@@ -40,7 +40,7 @@ class Module extends \yii\base\Module
      * Process an incoming request
      * @return string Output to be displayed
      */
-    public function handleRequest(): string
+    public function handleRequest()
     {
         ob_start();
         ob_implicit_flush(false);

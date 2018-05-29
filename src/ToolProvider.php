@@ -9,7 +9,6 @@ namespace izumi\yii2lti;
 
 use IMSGlobal\LTI\ToolProvider\DataConnector\DataConnector_pdo;
 use Yii;
-use yii\db\Connection;
 use yii\di\Instance;
 
 /**
@@ -20,13 +19,13 @@ use yii\di\Instance;
 class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider
 {
     /**
-     * @var string|Connection
+     * @var string|\yii\db\Connection
      */
     public $db = 'db';
 
     public function __construct()
     {
-        $this->db = Instance::ensure($this->db, Connection::class);
+        $this->db = Instance::ensure($this->db, '\yii\db\Connection');
         $dataConnector = new DataConnector_pdo($this->db->getMasterPdo(), $this->db->tablePrefix);
 
         parent::__construct($dataConnector);
@@ -40,7 +39,7 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider
      * @param string $eventName
      * @return bool
      */
-    protected function processRequest(string $eventName): bool
+    protected function processRequest($eventName)
     {
         if (Module::getInstance()->hasEventHandlers($eventName)) {
             Module::getInstance()->trigger($eventName, new ToolProviderEvent($this));

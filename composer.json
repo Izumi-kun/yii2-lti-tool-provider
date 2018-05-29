@@ -3,7 +3,7 @@
   "description": "LTI Tool Provider library for Yii2",
   "type": "yii2-extension",
   "require": {
-    "php": "^7.0",
+    "php": ">=5.4.0",
     "yiisoft/yii2": "~2.0.14",
     "izumi-kun/lti": "~1.0.0"
   },
