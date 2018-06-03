@@ -7,7 +7,12 @@
 
 namespace izumi\yii2lti;
 
+use IMSGlobal\LTI\HTTPMessage;
+use IMSGlobal\LTI\ToolProvider\DataConnector\DataConnector_pdo;
 use Yii;
+use yii\db\Connection;
+use yii\di\Instance;
+use yii\httpclient\Client;
 
 /**
  * Module.
@@ -22,9 +27,17 @@ class Module extends \yii\base\Module
     const EVENT_ERROR = 'error';
 
     /**
-     * @var string|array|ToolProvider
+     * @var ToolProvider|array|string
      */
-    public $toolProvider = '\izumi\yii2lti\ToolProvider';
+    public $toolProvider = [];
+    /**
+     * @var Client|array|string
+     */
+    public $httpClient = ['class' => '\yii\httpclient\Client'];
+    /**
+     * @var Connection|array|string the DB connection object or the application component ID of the DB connection.
+     */
+    public $db = 'db';
 
     /**
      * @inheritdoc
@@ -33,7 +46,25 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
-        $this->toolProvider = Yii::createObject($this->toolProvider);
+        $this->db = Instance::ensure($this->db, Connection::className());
+
+        if (!($this->toolProvider instanceof ToolProvider)) {
+            $tpConfig = $this->toolProvider;
+            if (is_string($tpConfig)) {
+                $tpConfig = ['class' => $tpConfig];
+            }
+            $tpConfig['dataConnector'] = new DataConnector_pdo($this->db->getMasterPdo(), $this->db->tablePrefix);
+            if (!isset($tpConfig['baseUrl'])) {
+                $tpConfig['baseUrl'] = Yii::$app->getRequest()->getHostInfo();
+            }
+            if (!isset($tpConfig['class'])) {
+                $tpConfig['class'] = '\izumi\yii2lti\ToolProvider';
+            }
+            $this->toolProvider = Yii::createObject($tpConfig);
+        }
+
+        $this->httpClient = Instance::ensure($this->httpClient, Client::className());
+        HTTPMessage::setHttpClient(new HttpClient());
     }
 
     /**

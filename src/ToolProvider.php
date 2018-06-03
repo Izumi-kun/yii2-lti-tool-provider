@@ -7,32 +7,22 @@
 
 namespace izumi\yii2lti;
 
-use IMSGlobal\LTI\ToolProvider\DataConnector\DataConnector_pdo;
 use Yii;
-use yii\di\Instance;
+use yii\base\Configurable;
 
 /**
  * ToolProvider
  *
  * @author Viktor Khokhryakov <viktor.khokhryakov@gmail.com>
  */
-class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider
+class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider implements Configurable
 {
-    /**
-     * @var string|\yii\db\Connection
-     */
-    public $db = 'db';
 
-    public function __construct()
+    public function __construct($config = [])
     {
-        $this->db = Instance::ensure($this->db, '\yii\db\Connection');
-        $dataConnector = new DataConnector_pdo($this->db->getMasterPdo(), $this->db->tablePrefix);
+        Yii::configure($this, $config);
 
-        parent::__construct($dataConnector);
-
-        if (empty($this->baseUrl)) {
-            $this->baseUrl = Yii::$app->getRequest()->getHostInfo();
-        }
+        parent::__construct($this->dataConnector);
     }
 
     /**
@@ -81,5 +71,14 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider
         Module::getInstance()->trigger(Module::EVENT_ERROR, new ToolProviderEvent($this));
 
         return false;
+    }
+
+    /**
+     * Whether debug messages explaining the cause of errors are to be returned to the tool consumer.
+     * @return bool
+     */
+    public function isDebugMode()
+    {
+        return $this->debugMode;
     }
 }
