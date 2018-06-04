@@ -82,6 +82,27 @@ class ConnectController extends Controller
 }
 ```
 
+### Outcome
+
+```php
+/* @var Module $module */
+$module = Yii::$app->getModule('lti');
+
+$user = User::fromRecordId(Yii::$app->session->get('userPk'), $module->toolProvider->dataConnector);
+
+$result = '0.8';
+$outcome = new Outcome($result);
+
+if ($user->getResourceLink()->doOutcomesService(ResourceLink::EXT_WRITE, $outcome, $user)) {
+    Yii::$app->session->addFlash('success', 'Result sent successfully');
+}
+```
+
 ### Sample app
 
 [https://github.com/Izumi-kun/yii2-lti-tool-provider-sample](https://github.com/Izumi-kun/yii2-lti-tool-provider-sample)
+
+### Useful
+
+- [LTI Tool Consumer emulator](http://lti.tools/saltire/tc)
+- [IMSGlobal/LTI-Tool-Provider-Library-PHP/wiki](https://github.com/IMSGlobal/LTI-Tool-Provider-Library-PHP/wiki)
