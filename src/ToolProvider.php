@@ -31,6 +31,7 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider implements C
      */
     protected function processRequest($eventName)
     {
+        Yii::debug("Action requested: '$eventName'", __METHOD__);
         if (Module::getInstance()->hasEventHandlers($eventName)) {
             Module::getInstance()->trigger($eventName, new ToolProviderEvent($this));
         } else {
