@@ -46,6 +46,15 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
+        $i18n = Yii::$app->i18n;
+        if (!isset($i18n->translations['lti']) && !isset($i18n->translations['lti*'])) {
+            $i18n->translations['lti'] = [
+                'class' => '\yii\i18n\PhpMessageSource',
+                'basePath' => __DIR__ . '/messages',
+                'sourceLanguage' => 'en',
+            ];
+        }
+
         $this->db = Instance::ensure($this->db, Connection::className());
 
         $tpConfig = is_array($this->toolProvider) ? $this->toolProvider : [];

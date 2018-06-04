@@ -70,6 +70,7 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider implements C
      */
     public function onError()
     {
+        $this->message = Yii::t('lti', 'Sorry, there was an error connecting you to the application.');
         Module::getInstance()->trigger(Module::EVENT_ERROR, new ToolProviderEvent($this));
 
         return false;
