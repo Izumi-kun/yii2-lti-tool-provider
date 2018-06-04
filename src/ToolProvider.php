@@ -33,10 +33,12 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider implements C
     {
         if (Module::getInstance()->hasEventHandlers($eventName)) {
             Module::getInstance()->trigger($eventName, new ToolProviderEvent($this));
-            return $this->ok;
+        } else {
+            $this->ok = false;
+            $this->reason = "Message type not supported: {$_POST['lti_message_type']}";
         }
 
-        return $this->onError();
+        return $this->ok;
     }
 
     /**
