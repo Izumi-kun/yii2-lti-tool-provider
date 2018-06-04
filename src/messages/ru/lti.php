@@ -23,5 +23,23 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Cancel' => 'Отмена',
+    'Consumer #{num}' => 'Пользователь #{num}',
+    'Create' => 'Создать',
+    'Create LTI Consumer' => 'Создать LTI пользователя',
+    'Created:' => 'Создан:',
+    'Delete' => 'Удалить',
+    'Disabled' => 'Отключен',
+    'Enabled' => 'Включен',
+    'Generate new secret' => 'Сгенерировать новый секрет',
+    'Key' => 'Ключ',
+    'Key:' => 'Ключ:',
+    'LTI Consumers' => 'Пользователи LTI',
+    'Last access:' => 'Последний доступ:',
+    'Name' => 'Имя',
+    'Secret' => 'Секрет',
+    'Status:' => 'Статус:',
+    'Update' => 'Обновить',
+    'Updated:' => 'Обновлен:',
     'Sorry, there was an error connecting you to the application.' => 'К сожалению, произошла ошибка подключения к приложению.',
 ];
