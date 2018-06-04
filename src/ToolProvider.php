@@ -84,4 +84,20 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider implements C
     {
         return $this->debugMode;
     }
+
+    /**
+     * @param string $value HTML to be displayed on a successful completion of the request.
+     */
+    public function setOutput($value)
+    {
+        $this->output = $value;
+    }
+
+    /**
+     * @param string $value HTML to be displayed on an unsuccessful completion of the request and no return URL is available.
+     */
+    public function setErrorOutput($value)
+    {
+        $this->errorOutput = $value;
+    }
 }
