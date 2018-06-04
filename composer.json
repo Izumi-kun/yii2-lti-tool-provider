@@ -2,8 +2,6 @@
   "name": "izumi-kun/yii2-lti-tool-provider",
   "description": "LTI Tool Provider library for Yii2",
   "type": "yii2-extension",
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "require": {
     "php": ">=5.4.0",
     "yiisoft/yii2": "~2.0.14",
