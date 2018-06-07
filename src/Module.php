@@ -67,17 +67,4 @@ class Module extends \yii\base\Module
         $this->httpClient = Instance::ensure($this->httpClient, Client::className());
         HTTPMessage::setHttpClient(new HttpClient());
     }
-
-    /**
-     * Process an incoming request
-     * @return string Output to be displayed
-     */
-    public function handleRequest()
-    {
-        ob_start();
-        ob_implicit_flush(false);
-        $this->toolProvider->handleRequest();
-        $result = ob_get_clean();
-        return $result;
-    }
 }

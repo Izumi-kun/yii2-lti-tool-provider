@@ -23,61 +23,83 @@ Add namespaced migrations: `izumi\yii2lti\migrations`. Apply new migrations.
 
 ### Application config
 
-Add module to web config and configure access.
+Add module to web config and configure. The module has three main events for handling messages from Tool Consumers:
+
+- `launch` for `basic-lti-launch-request` message type
+- `contentItem` for `ContentItemSelectionRequest` message type
+- `register` for `ToolProxyRegistrationRequest` message type
+
+Make sure to configure access to `lti/consumer` controller actions.
 
 ```php
 $config = [
     'modules' => [
         'lti' => [
             'class' => '\izumi\yii2lti\Module',
+            'on launch' => ['\app\controllers\SiteController', 'ltiLaunch'],
+            'on error' => ['\app\controllers\SiteController', 'ltiError'],
             'as access' => [
                 'class' => '\yii\filters\AccessControl',
-                'rules' => [['allow' => true, 'roles' => ['admin']]],
+                'rules' => [
+                    ['allow' => true, 'controllers' => ['lti/connect']],
+                    ['allow' => true, 'controllers' => ['lti/consumer'], 'roles' => ['admin']],
+                ],
             ],
         ],
     ],
 ];
 ```
 
-### Connect action
+### Event handlers
 
-Create connect action for handling requests from Tool Consumers.
+Create event handlers to respect module config.
 
 ```php
-use izumi\yii2lti\Module;
+namespace app\controllers;
+
 use izumi\yii2lti\ToolProviderEvent;
 use Yii;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-class ConnectController extends Controller
+class SiteController extends Controller
 {
-    public $enableCsrfValidation = false;
-
-    public function actionIndex()
+    /**
+     * basic-lti-launch-request handler
+     * @param ToolProviderEvent $event
+     */
+    public static function ltiLaunch(ToolProviderEvent $event)
     {
-        /* @var Module $module */
-        $module = Yii::$app->getModule('lti');
+        $tool = $event->sender;
 
-        // launch action
-        $module->on(Module::EVENT_LAUNCH, function (ToolProviderEvent $event){
-            $tool = $event->sender;
+        // $userPk can be used for user identity
+        $userPk = $tool->user->getRecordId();
+        $isAdmin = $tool->user->isStaff() || $tool->user->isAdmin();
 
-            // $userPk can be used for user identity
-            $userPk = $tool->user->getRecordId();
-            $isAdmin = $tool->user->isStaff() || $tool->user->isAdmin();
+        Yii::$app->session->set('isAdmin', $isAdmin);
+        Yii::$app->session->set('isLtiSession', true);
+        Yii::$app->session->set('userPk', $userPk);
+        Yii::$app->controller->redirect(['/site/index']);
 
-            Yii::$app->session->set('isAdmin', $isAdmin);
-            Yii::$app->session->set('userPk', $userPk);
+        $tool->ok = true;
+    }
 
-            $this->redirect(['site/index']);
-            $tool->ok = true;
-        });
-
-        $module->on(Module::EVENT_ERROR, function (ToolProviderEvent $event){
-            Yii::error($event->sender->reason);
-        });
-
-        return $module->handleRequest();
+    /**
+     * LTI error handler
+     * @param ToolProviderEvent $event
+     * @throws BadRequestHttpException
+     */
+    public static function ltiError(ToolProviderEvent $event)
+    {
+        $tool = $event->sender;
+        $msg = $tool->message;
+        if (!empty($tool->reason)) {
+            Yii::error($tool->reason);
+            if ($tool->isDebugMode()) {
+                $msg = $tool->reason;
+            }
+        }
+        throw new BadRequestHttpException($msg);
     }
 }
 ```
