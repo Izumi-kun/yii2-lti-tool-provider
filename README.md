@@ -30,6 +30,7 @@ Add module to web config and configure. The module has three main events for han
 - `register` for `ToolProxyRegistrationRequest` message type
 
 Make sure to configure access to `lti/consumer` controller actions.
+All messages from Tool Consumers handles by `lti/connect` controller and there is no access restrictions.
 
 ```php
 $config = [
