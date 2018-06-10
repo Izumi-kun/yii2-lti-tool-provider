@@ -60,7 +60,7 @@ class M180512000000Init extends Migration
         $nonce = '{{%lti2_nonce}}';
         $this->createTable($nonce, [
             'consumer_pk' => $this->integer()->notNull(),
-            'value' => $this->string(32)->notNull(),
+            'value' => $this->string(255)->notNull(),
             'expires' => $this->dateTime()->notNull(),
         ], $tableOptions);
         $this->addPrimaryKey("pk-nonce", $nonce, ['consumer_pk', 'value']);
