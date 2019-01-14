@@ -25,14 +25,14 @@ class M180512000000Init extends Migration
         $consumer = '{{%lti2_consumer}}';
         $this->createTable($consumer, [
             'consumer_pk' => $this->primaryKey(),
-            'name' => $this->string(256)->notNull(),
-            'consumer_key256' => $this->string(256)->notNull()->unique(),
+            'name' => $this->string(255)->notNull(),
+            'consumer_key256' => $this->string(255)->notNull()->unique(),
             'consumer_key' => $this->text()->null(),
-            'secret' => $this->string(1024)->notNull(),
+            'secret' => $this->string(255)->notNull(),
             'lti_version' => $this->string(10)->null(),
             'consumer_name' => $this->string(255)->null(),
             'consumer_version' => $this->string(255)->null(),
-            'consumer_guid' => $this->string(1024)->null(),
+            'consumer_guid' => $this->string(255)->null(),
             'profile' => $this->text()->null(),
             'tool_proxy' => $this->text()->null(),
             'settings' => $this->text()->null(),
@@ -101,7 +101,7 @@ class M180512000000Init extends Migration
             'user_pk' => $this->primaryKey(),
             'resource_link_pk' => $this->integer()->notNull(),
             'lti_user_id' => $this->string(255)->notNull(),
-            'lti_result_sourcedid' => $this->string(1024)->notNull(),
+            'lti_result_sourcedid' => $this->text()->notNull(),
             'created' => $this->dateTime()->notNull(),
             'updated' => $this->dateTime()->notNull(),
         ], $tableOptions);
