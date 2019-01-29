@@ -23,6 +23,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Are you sure you want to delete this consumer?' => 'Вы уверены, что хотите удалить этого пользователя?',
     'Cancel' => 'Отмена',
     'Consumer #{num}' => 'Пользователь #{num}',
     'Create' => 'Создать',
@@ -38,8 +39,8 @@ return [
     'Last access:' => 'Последний доступ:',
     'Name' => 'Имя',
     'Secret' => 'Секрет',
+    'Sorry, there was an error connecting you to the application.' => 'К сожалению, произошла ошибка подключения к приложению.',
     'Status:' => 'Статус:',
     'Update' => 'Обновить',
     'Updated:' => 'Обновлен:',
-    'Sorry, there was an error connecting you to the application.' => 'К сожалению, произошла ошибка подключения к приложению.',
 ];

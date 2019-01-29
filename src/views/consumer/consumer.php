@@ -7,6 +7,7 @@
 
 use izumi\yii2lti\models\ConsumerForm;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
@@ -39,7 +40,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
         <?= Html::a(Yii::t('lti', 'Cancel'), ['index'], ['class' => 'btn btn-default']) ?>
         <?php if (!$isNew): ?>
             <div class="pull-right">
-                <?= Html::a(Yii::t('lti', 'Delete'), "#", ['class' => 'btn btn-danger', 'onclick' => 'confirm() && document.forms["delete"].submit();return false;']) ?>
+                <?= Html::a(Yii::t('lti', 'Delete'), "#", ['class' => 'btn btn-danger', 'onclick' => 'deleteConsumer();return false;']) ?>
             </div>
         <?php endif; ?>
     </div>
@@ -48,3 +49,11 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 <?= Html::beginForm(['delete', 'id' => $id], 'post', ['name' => 'delete']) ?>
 <?= Html::endForm() ?>
+
+<script type="text/javascript">
+  function deleteConsumer() {
+    if (confirm(<?= Json::htmlEncode(Yii::t('lti', 'Are you sure you want to delete this consumer?')) ?>)) {
+      document.forms['delete'].submit();
+    }
+  }
+</script>
