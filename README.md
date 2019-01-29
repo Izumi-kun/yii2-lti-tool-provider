@@ -108,15 +108,17 @@ class SiteController extends Controller
 ### Outcome
 
 ```php
-/* @var Module $module */
+use IMSGlobal\LTI\ToolProvider;
+
+/* @var \izumi\yii2lti\Module $module */
 $module = Yii::$app->getModule('lti');
 
-$user = User::fromRecordId(Yii::$app->session->get('userPk'), $module->toolProvider->dataConnector);
+$user = ToolProvider\User::fromRecordId(Yii::$app->session->get('userPk'), $module->toolProvider->dataConnector);
 
 $result = '0.8';
-$outcome = new Outcome($result);
+$outcome = new ToolProvider\Outcome($result);
 
-if ($user->getResourceLink()->doOutcomesService(ResourceLink::EXT_WRITE, $outcome, $user)) {
+if ($user->getResourceLink()->doOutcomesService(ToolProvider\ResourceLink::EXT_WRITE, $outcome, $user)) {
     Yii::$app->session->addFlash('success', 'Result sent successfully');
 }
 ```
