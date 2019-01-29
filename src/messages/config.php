@@ -54,7 +54,7 @@ return [
     'only' => ['*.php'],
     'phpFileHeader' => '/**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2018 Viktor Khokhryakov
+ * @copyright Copyright (c) 2019 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
