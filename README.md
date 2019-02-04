@@ -1,7 +1,7 @@
 Yii2 LTI Tool Provider
 ======================
 
-LTI Tool Provider library for Yii2.
+LTI Tool Provider module for Yii2.
 
 [![Latest Stable Version](https://poser.pugx.org/izumi-kun/yii2-lti-tool-provider/v/stable)](https://packagist.org/packages/izumi-kun/yii2-lti-tool-provider)
 [![Total Downloads](https://poser.pugx.org/izumi-kun/yii2-lti-tool-provider/downloads)](https://packagist.org/packages/izumi-kun/yii2-lti-tool-provider)
@@ -129,5 +129,5 @@ if ($user->getResourceLink()->doOutcomesService(ToolProvider\ResourceLink::EXT_W
 
 ### Useful
 
-- [LTI Tool Consumer emulator](http://lti.tools/saltire/tc)
+- [LTI Tool Consumer emulator](https://lti.tools/saltire/tc)
 - [IMSGlobal/LTI-Tool-Provider-Library-PHP/wiki](https://github.com/IMSGlobal/LTI-Tool-Provider-Library-PHP/wiki)
