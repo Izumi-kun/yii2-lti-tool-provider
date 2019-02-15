@@ -23,6 +23,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Launch URL:' => 'URL запуска:',
     'Are you sure you want to delete this consumer?' => 'Вы уверены, что хотите удалить этого пользователя?',
     'Cancel' => 'Отмена',
     'Consumer #{num}' => 'Пользователь #{num}',

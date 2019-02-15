@@ -8,6 +8,7 @@
 use izumi\yii2lti\models\ConsumerForm;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
@@ -34,6 +35,11 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             <?= $form->field($model, 'secret')->textInput(['disabled' => true]) ?>
             <?= $form->field($model, 'newSecret')->checkbox() ?>
         <?php endif; ?>
+        <div class="alert alert-info">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            <?= Yii::t('lti', 'Launch URL:') ?>
+            <strong><?= Html::encode(Url::to(['connect/index'], true)) ?></strong>
+        </div>
     </div>
     <div class="panel-footer">
         <?= Html::submitButton($isNew ? Yii::t('lti', 'Create') : Yii::t('lti', 'Update'), ['class' => $isNew ? 'btn btn-success' : 'btn btn-warning']) ?>
