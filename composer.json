@@ -6,7 +6,7 @@
     "php": ">=5.4.0",
     "yiisoft/yii2": "~2.0.14",
     "yiisoft/yii2-httpclient": "~2.0.0",
-    "izumi-kun/lti": "~1.1.0"
+    "izumi-kun/lti": "~1.2.0"
   },
   "scripts": {
     "messages": "yii message/extract src/messages/config.php"
