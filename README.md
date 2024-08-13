@@ -83,6 +83,7 @@ class SiteController extends Controller
         Yii::$app->controller->redirect(['/site/index']);
 
         $tool->ok = true;
+        $event->handled = true;
     }
 
     /**
@@ -96,7 +97,7 @@ class SiteController extends Controller
         $msg = $tool->message;
         if (!empty($tool->reason)) {
             Yii::error($tool->reason);
-            if ($tool->isDebugMode()) {
+            if ($tool->debugMode) {
                 $msg = $tool->reason;
             }
         }
@@ -108,17 +109,17 @@ class SiteController extends Controller
 ### Outcome
 
 ```php
-use IMSGlobal\LTI\ToolProvider;
+use ceLTIc\LTI;
 
 /* @var \izumi\yii2lti\Module $module */
 $module = Yii::$app->getModule('lti');
 
-$user = ToolProvider\User::fromRecordId(Yii::$app->session->get('userPk'), $module->toolProvider->dataConnector);
+$user = LTI\UserResult::fromRecordId(Yii::$app->session->get('userPk'), $module->toolProvider->dataConnector);
 
 $result = '0.8';
-$outcome = new ToolProvider\Outcome($result);
+$outcome = new LTI\Outcome($result);
 
-if ($user->getResourceLink()->doOutcomesService(ToolProvider\ResourceLink::EXT_WRITE, $outcome, $user)) {
+if ($user->getResourceLink()->doOutcomesService(LTI\Enum\ServiceAction::Write, $outcome, $user)) {
     Yii::$app->session->addFlash('success', 'Result sent successfully');
 }
 ```
@@ -130,4 +131,4 @@ if ($user->getResourceLink()->doOutcomesService(ToolProvider\ResourceLink::EXT_W
 ### Useful
 
 - [LTI Tool Consumer emulator](https://lti.tools/saltire/tc)
-- [IMSGlobal/LTI-Tool-Provider-Library-PHP/wiki](https://github.com/IMSGlobal/LTI-Tool-Provider-Library-PHP/wiki)
+- [celtic-project/LTI-PHP/wiki](https://github.com/celtic-project/LTI-PHP/wiki)

@@ -1,7 +1,8 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
@@ -21,12 +22,11 @@ class ConnectController extends Controller
 {
     public $enableCsrfValidation = false;
 
-    public function actionIndex()
+    public function actionIndex(): string
     {
         ob_start();
         ob_implicit_flush(false);
         $this->module->toolProvider->handleRequest();
-        $result = ob_get_clean();
-        return $result;
+        return ob_get_clean();
     }
 }

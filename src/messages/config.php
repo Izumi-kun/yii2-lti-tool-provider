@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
@@ -21,7 +21,7 @@ return [
     // boolean, whether to sort messages by keys when merging new messages
     // with the existing ones. Defaults to false, which means the new (untranslated)
     // messages will be separated from the old (translated) ones.
-    'sort' => false,
+    'sort' => true,
     // boolean, whether the message file should be overwritten with the merged messages
     'overwrite' => true,
     // boolean, whether to remove messages that no longer appear in the source code.
@@ -54,7 +54,7 @@ return [
     'only' => ['*.php'],
     'phpFileHeader' => '/**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 

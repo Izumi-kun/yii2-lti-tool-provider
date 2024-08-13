@@ -1,12 +1,13 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
 namespace izumi\yii2lti;
 
+use ceLTIc\LTI\Tool;
 use Yii;
 use yii\base\Configurable;
 
@@ -15,7 +16,7 @@ use yii\base\Configurable;
  *
  * @author Viktor Khokhryakov <viktor.khokhryakov@gmail.com>
  */
-class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider implements Configurable
+class ToolProvider extends Tool implements Configurable
 {
 
     public function __construct($config = [])
@@ -27,69 +28,81 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider implements C
 
     /**
      * @param string $eventName
-     * @return bool
      */
-    protected function processRequest($eventName)
+    protected function processRequest(string $eventName): void
     {
         Yii::debug("Action requested: '$eventName'", __METHOD__);
-        if (Module::getInstance()->hasEventHandlers($eventName)) {
-            Module::getInstance()->trigger($eventName, new ToolProviderEvent($this));
-        } else {
+        $event = new ToolProviderEvent($this);
+        Module::getInstance()->trigger($eventName, $event);
+        if (!$event->handled) {
+            Yii::debug("Message type not supported: {$_POST['lti_message_type']}", __METHOD__);
             $this->ok = false;
             $this->reason = "Message type not supported: {$_POST['lti_message_type']}";
         }
-
-        return $this->ok;
     }
 
     /**
      * @inheritdoc
      */
-    public function onLaunch()
+    protected function onLaunch(): void
     {
-        return $this->processRequest(Module::EVENT_LAUNCH);
+        $this->processRequest(Module::EVENT_LAUNCH);
     }
 
     /**
      * @inheritdoc
      */
-    public function onRegister()
+    protected function onConfigure(): void
     {
-        return $this->processRequest(Module::EVENT_REGISTER);
+        $this->processRequest(Module::EVENT_CONFIGURE);
     }
 
     /**
      * @inheritdoc
      */
-    public function onContentItem()
+    protected function onDashboard(): void
     {
-        return $this->processRequest(Module::EVENT_CONTENT_ITEM);
+        $this->processRequest(Module::EVENT_DASHBOARD);
     }
 
     /**
      * @inheritdoc
      */
-    public function onError()
+    protected function onContentItem(): void
+    {
+        $this->processRequest(Module::EVENT_CONTENT_ITEM);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function onContentItemUpdate(): void
+    {
+        $this->processRequest(Module::EVENT_CONTENT_ITEM_UPDATE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function onSubmissionReview(): void
+    {
+        $this->processRequest(Module::EVENT_SUBMISSION_REVIEW);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function onError(): void
     {
         $this->message = Yii::t('lti', 'Sorry, there was an error connecting you to the application.');
         Module::getInstance()->trigger(Module::EVENT_ERROR, new ToolProviderEvent($this));
-
-        return false;
-    }
-
-    /**
-     * Whether debug messages explaining the cause of errors are to be returned to the tool consumer.
-     * @return bool
-     */
-    public function isDebugMode()
-    {
-        return $this->debugMode;
+        $this->ok = false;
     }
 
     /**
      * @param string $value HTML to be displayed on a successful completion of the request.
      */
-    public function setOutput($value)
+    public function setOutput(string $value)
     {
         $this->output = $value;
     }
@@ -97,7 +110,7 @@ class ToolProvider extends \IMSGlobal\LTI\ToolProvider\ToolProvider implements C
     /**
      * @param string $value HTML to be displayed on an unsuccessful completion of the request and no return URL is available.
      */
-    public function setErrorOutput($value)
+    public function setErrorOutput(string $value)
     {
         $this->errorOutput = $value;
     }

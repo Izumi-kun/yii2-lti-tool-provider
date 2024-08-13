@@ -1,38 +1,38 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
-use IMSGlobal\LTI\ToolProvider\ToolConsumer;
+use ceLTIc\LTI\Platform;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this View */
-/* @var $consumers ToolConsumer[] */
+/* @var $platforms Platform[] */
 
-$this->title = Yii::t('lti', 'LTI Consumers');
+$this->title = Yii::t('lti', 'LTI Platforms');
 
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 ?>
 
 <div class="row">
-    <?php foreach ($consumers as $consumer): ?>
+    <?php foreach ($platforms as $platform): ?>
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <span class="panel-title">
-                        <strong><?= Html::a(Html::encode($consumer->name), ['update', 'id' => $consumer->getRecordId()], ['class' => '']) ?></strong>
+                        <strong><?= Html::a(Html::encode($platform->name), ['update', 'id' => $platform->getRecordId()], ['class' => '']) ?></strong>
                     </span>
                 </div>
                 <div class="panel-footer small text-muted">
                     <div>
                         <?= Yii::t('lti', 'Status:') ?>
-                        <span class="<?= $consumer->getIsAvailable() ? 'text-success' : 'text-muted' ?>">
-                            <?php if ($consumer->getIsAvailable()): ?>
+                        <span class="<?= $platform->getIsAvailable() ? 'text-success' : 'text-muted' ?>">
+                            <?php if ($platform->getIsAvailable()): ?>
                                 <span class="glyphicon glyphicon-play"></span>
                                 <strong><?= Yii::t('lti', 'Enabled') ?></strong>
                             <?php else: ?>
@@ -43,19 +43,19 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     </div>
                     <div>
                         <?= Yii::t('lti', 'Key:') ?>
-                        <?= $consumer->getKey() ?>
+                        <?= $platform->getKey() ?>
                     </div>
                     <div>
                         <?= Yii::t('lti', 'Created:') ?>
-                        <?= Yii::$app->formatter->asDatetime($consumer->created) ?>
+                        <?= Yii::$app->formatter->asDatetime($platform->created) ?>
                     </div>
                     <div>
                         <?= Yii::t('lti', 'Updated:') ?>
-                        <?= Yii::$app->formatter->asDatetime($consumer->updated) ?>
+                        <?= Yii::$app->formatter->asDatetime($platform->updated) ?>
                     </div>
                     <div>
                         <?= Yii::t('lti', 'Last access:') ?>
-                        <?= Yii::$app->formatter->asDate($consumer->lastAccess) ?>
+                        <?= Yii::$app->formatter->asDate($platform->lastAccess) ?>
                     </div>
                 </div>
             </div>

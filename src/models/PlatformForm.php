@@ -1,51 +1,52 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
 namespace izumi\yii2lti\models;
 
-use IMSGlobal\LTI\ToolProvider\ToolConsumer;
+use ceLTIc\LTI\Platform;
 use izumi\yii2lti\Module;
+use PDOException;
 use Yii;
 use yii\base\Model;
 
 /**
- * Class ConsumerForm
+ * Class PlatformForm
  *
  * @author Viktor Khokhryakov <viktor.khokhryakov@gmail.com>
  */
-class ConsumerForm extends Model
+class PlatformForm extends Model
 {
     const SCENARIO_UPDATE = 'update';
 
     /**
      * @var string
      */
-    public $name;
+    public string $name = '';
     /**
      * @var string
      */
-    public $key;
+    public string $key = '';
     /**
-     * @var mixed
+     * @var string
      */
-    public $newSecret;
+    public string $newSecret = '0';
     /**
-     * @var mixed
+     * @var string
      */
-    public $enabled;
+    public string $enabled = '0';
     /**
-     * @var ToolConsumer
+     * @var Platform
      */
-    private $_consumer;
+    private Platform $_platform;
 
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name', 'key'], 'required'],
@@ -59,7 +60,7 @@ class ConsumerForm extends Model
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'name' => Yii::t('lti', 'Name'),
@@ -70,51 +71,51 @@ class ConsumerForm extends Model
         ];
     }
 
-    public function setConsumer(ToolConsumer $consumer)
+    public function setPlatform(Platform $platform)
     {
         $this->scenario = self::SCENARIO_UPDATE;
-        $this->_consumer = $consumer;
-        $this->key = $consumer->getKey();
-        $this->name = $consumer->name;
-        $this->enabled = $consumer->enabled;
+        $this->_platform = $platform;
+        $this->key = $platform->getKey();
+        $this->name = $platform->name;
+        $this->enabled = $platform->enabled;
     }
 
     /**
-     * @return bool|ToolConsumer
+     * @return Platform
      */
-    public function getConsumer()
+    public function getPlatform(): Platform
     {
-        if ($this->_consumer === null) {
-            $c = new ToolConsumer(null, Module::getInstance()->toolProvider->dataConnector);
+        if (!isset($this->_platform)) {
+            $c = new Platform(Module::getInstance()->toolProvider->dataConnector);
             $c->initialize();
-            $this->_consumer = $c;
+            $this->_platform = $c;
         }
-        return $this->_consumer;
+        return $this->_platform;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSecret()
+    public function getSecret(): ?string
     {
-        return $this->getConsumer()->secret;
+        return $this->getPlatform()->secret;
     }
 
-    public function save()
+    public function save(): bool
     {
         if (!$this->validate()) {
             return false;
         }
-        $consumer = $this->getConsumer();
-        $consumer->setKey($this->key);
-        $consumer->name = $this->name;
-        $consumer->enabled = $this->enabled;
+        $platform = $this->getPlatform();
+        $platform->setKey($this->key);
+        $platform->name = $this->name;
+        $platform->enabled = (bool)$this->enabled;
         if ($this->newSecret || $this->scenario === self::SCENARIO_DEFAULT) {
-            $consumer->secret = sha1(Yii::$app->security->generateRandomKey(128));
+            $platform->secret = sha1(Yii::$app->security->generateRandomKey(128));
         }
         try {
-            $ok = $consumer->save();
-        } catch (\PDOException $exception){
+            $ok = $platform->save();
+        } catch (PDOException){
             $this->addError('key');
             return false;
         }

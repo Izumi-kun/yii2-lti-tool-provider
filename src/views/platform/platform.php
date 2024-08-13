@@ -1,26 +1,26 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
-use izumi\yii2lti\models\ConsumerForm;
+use izumi\yii2lti\models\PlatformForm;
+use yii\base\Model;
 use yii\helpers\Html;
-use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
 /* @var $this View */
-/* @var $model ConsumerForm */
+/* @var $model PlatformForm */
 
-$isNew = $model->scenario === ConsumerForm::SCENARIO_DEFAULT;
-$id = $model->getConsumer()->getRecordId();
+$isNew = $model->scenario === Model::SCENARIO_DEFAULT;
+$id = $model->getPlatform()->getRecordId();
 
-$this->title = $isNew ? Yii::t('lti', 'Create LTI Consumer') : Yii::t('lti', 'Consumer #{num}', ['num' => $id]);
+$this->title = $isNew ? Yii::t('lti', 'Create LTI Platform') : Yii::t('lti', 'Platform #{num}', ['num' => $id]);
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('lti', 'LTI Consumers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('lti', 'LTI Platforms'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 ?>
@@ -46,20 +46,13 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
         <?= Html::a(Yii::t('lti', 'Cancel'), ['index'], ['class' => 'btn btn-default']) ?>
         <?php if (!$isNew): ?>
             <div class="pull-right">
-                <?= Html::a(Yii::t('lti', 'Delete'), "#", ['class' => 'btn btn-danger', 'onclick' => 'deleteConsumer();return false;']) ?>
+                <?= Html::a(Yii::t('lti', 'Delete'), ['delete', 'id' => $id], [
+                    'class' => 'btn btn-danger',
+                    'data' => ['method' => 'post', 'confirm' => Yii::t('lti', 'Are you sure you want to delete this platform?')],
+                ]) ?>
             </div>
         <?php endif; ?>
     </div>
 </div>
 <?php ActiveForm::end() ?>
 
-<?= Html::beginForm(['delete', 'id' => $id], 'post', ['name' => 'delete']) ?>
-<?= Html::endForm() ?>
-
-<script type="text/javascript">
-  function deleteConsumer() {
-    if (confirm(<?= Json::htmlEncode(Yii::t('lti', 'Are you sure you want to delete this consumer?')) ?>)) {
-      document.forms['delete'].submit();
-    }
-  }
-</script>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
@@ -23,12 +23,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Launch URL:' => 'URL запуска:',
-    'Are you sure you want to delete this consumer?' => 'Вы уверены, что хотите удалить этого пользователя?',
+    'Are you sure you want to delete this platform?' => 'Вы уверены, что хотите удалить эту платформу?',
     'Cancel' => 'Отмена',
-    'Consumer #{num}' => 'Пользователь #{num}',
     'Create' => 'Создать',
-    'Create LTI Consumer' => 'Создать LTI пользователя',
+    'Create LTI Platform' => 'Создать LTI платформу',
     'Created:' => 'Создан:',
     'Delete' => 'Удалить',
     'Disabled' => 'Отключен',
@@ -36,9 +34,11 @@ return [
     'Generate new secret' => 'Сгенерировать новый секрет',
     'Key' => 'Ключ',
     'Key:' => 'Ключ:',
-    'LTI Consumers' => 'Пользователи LTI',
+    'LTI Platforms' => 'LTI платформы',
     'Last access:' => 'Последний доступ:',
+    'Launch URL:' => 'URL запуска:',
     'Name' => 'Имя',
+    'Platform #{num}' => 'Платформа #{num}',
     'Secret' => 'Секрет',
     'Sorry, there was an error connecting you to the application.' => 'К сожалению, произошла ошибка подключения к приложению.',
     'Status:' => 'Статус:',

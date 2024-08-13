@@ -1,27 +1,29 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
 namespace izumi\yii2lti\controllers;
 
-use IMSGlobal\LTI\ToolProvider\ToolConsumer;
-use izumi\yii2lti\models\ConsumerForm;
+use ceLTIc\LTI\Platform;
+use izumi\yii2lti\models\PlatformForm;
 use izumi\yii2lti\Module;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
- * Class ConsumerController
+ * Class PlatformController
  *
  * @author Viktor Khokhryakov <viktor.khokhryakov@gmail.com>
  */
-class ConsumerController extends Controller
+class PlatformController extends Controller
 {
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'verb' => [
@@ -34,49 +36,49 @@ class ConsumerController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionIndex(): string
     {
-        $consumers = Module::getInstance()->toolProvider->getConsumers();
-        usort($consumers, function (ToolConsumer $a, ToolConsumer $b){
+        $platforms = Module::getInstance()->toolProvider->getPlatforms();
+        usort($platforms, function (Platform $a, Platform $b){
             return $a->getRecordId() > $b->getRecordId() ? 1 : -1;
         });
 
         return $this->render('index', [
-            'consumers' => $consumers,
+            'platforms' => $platforms,
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate(): Response|string
     {
-        $form = new ConsumerForm();
+        $form = new PlatformForm();
         if ($form->load(Yii::$app->getRequest()->post()) && $form->save()) {
-            return $this->redirect(['update', 'id' => $form->getConsumer()->getRecordId()]);
+            return $this->redirect(['update', 'id' => $form->getPlatform()->getRecordId()]);
         }
 
-        return $this->render('consumer', ['model' => $form]);
+        return $this->render('platform', ['model' => $form]);
     }
 
-    public function actionUpdate($id)
+    public function actionUpdate($id): Response|string
     {
-        $c = ToolConsumer::fromRecordId($id, Module::getInstance()->toolProvider->dataConnector);
-        if ($c->getRecordId() === null) {
+        $platform = Platform::fromRecordId($id, Module::getInstance()->toolProvider->dataConnector);
+        if ($platform->getRecordId() === null) {
             throw new NotFoundHttpException();
         }
 
-        $form = new ConsumerForm();
-        $form->setConsumer($c);
+        $form = new PlatformForm();
+        $form->setPlatform($platform);
         if ($form->load(Yii::$app->getRequest()->post()) && $form->save()) {
             return $this->refresh();
         }
 
-        return $this->render('consumer', [
+        return $this->render('platform', [
             'model' => $form,
         ]);
     }
 
-    public function actionDelete($id)
+    public function actionDelete($id): Response
     {
-        $c = ToolConsumer::fromRecordId($id, Module::getInstance()->toolProvider->dataConnector);
+        $c = Platform::fromRecordId($id, Module::getInstance()->toolProvider->dataConnector);
         if ($c->getRecordId() === null) {
             throw new NotFoundHttpException();
         }
