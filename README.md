@@ -23,14 +23,17 @@ Add namespaced migrations: `izumi\yii2lti\migrations`. Apply new migrations.
 
 ### Application config
 
-Add module to web config and configure. The module has three main events for handling messages from Tool Consumers:
+Add module to web config and configure. The module support those events for handling messages from Platforms:
 
-- `launch` for `basic-lti-launch-request` message type
-- `contentItem` for `ContentItemSelectionRequest` message type
-- `register` for `ToolProxyRegistrationRequest` message type
+- `launch`
+- `configure`
+- `dashboard`
+- `contentItem`
+- `contentItemUpdate`
+- `submissionReview`
 
-Make sure to configure access to `lti/consumer` controller actions.
-All messages from Tool Consumers handles by `lti/connect` controller and there is no access restrictions.
+Make sure to configure access to `lti/platform` controller actions.
+All messages from Platforms handles by `lti/connect` controller and there is no access restrictions.
 
 ```php
 $config = [
@@ -43,7 +46,7 @@ $config = [
                 'class' => '\yii\filters\AccessControl',
                 'rules' => [
                     ['allow' => true, 'controllers' => ['lti/connect']],
-                    ['allow' => true, 'controllers' => ['lti/consumer'], 'roles' => ['admin']],
+                    ['allow' => true, 'controllers' => ['lti/platform'], 'roles' => ['admin']],
                 ],
             ],
         ],
@@ -58,7 +61,7 @@ Create event handlers to respect module config.
 ```php
 namespace app\controllers;
 
-use izumi\yii2lti\ToolProviderEvent;
+use izumi\yii2lti\ToolEvent;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -67,9 +70,9 @@ class SiteController extends Controller
 {
     /**
      * basic-lti-launch-request handler
-     * @param ToolProviderEvent $event
+     * @param ToolEvent $event
      */
-    public static function ltiLaunch(ToolProviderEvent $event)
+    public static function ltiLaunch(ToolEvent $event)
     {
         $tool = $event->sender;
 
@@ -88,10 +91,10 @@ class SiteController extends Controller
 
     /**
      * LTI error handler
-     * @param ToolProviderEvent $event
+     * @param ToolEvent $event
      * @throws BadRequestHttpException
      */
-    public static function ltiError(ToolProviderEvent $event)
+    public static function ltiError(ToolEvent $event)
     {
         $tool = $event->sender;
         $msg = $tool->message;
@@ -114,12 +117,12 @@ use ceLTIc\LTI;
 /* @var \izumi\yii2lti\Module $module */
 $module = Yii::$app->getModule('lti');
 
-$user = LTI\UserResult::fromRecordId(Yii::$app->session->get('userPk'), $module->toolProvider->dataConnector);
+$user = $module->findUserById(Yii::$app->session->get('userPk'));
 
 $result = '0.8';
 $outcome = new LTI\Outcome($result);
 
-if ($user->getResourceLink()->doOutcomesService(LTI\Enum\ServiceAction::Write, $outcome, $user)) {
+if ($module->doOutcomesService(LTI\Enum\ServiceAction::Write, $outcome, $user)) {
     Yii::$app->session->addFlash('success', 'Result sent successfully');
 }
 ```
@@ -130,5 +133,5 @@ if ($user->getResourceLink()->doOutcomesService(LTI\Enum\ServiceAction::Write, $
 
 ### Useful
 
-- [LTI Tool Consumer emulator](https://lti.tools/saltire/tc)
+- [LTI Platform emulator](https://saltire.lti.app/platform)
 - [celtic-project/LTI-PHP/wiki](https://github.com/celtic-project/LTI-PHP/wiki)

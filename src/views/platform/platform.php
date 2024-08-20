@@ -5,7 +5,9 @@
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
+use ceLTIc\LTI\Jwt\Jwt;
 use izumi\yii2lti\models\PlatformForm;
+use izumi\yii2lti\Module;
 use yii\base\Model;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -15,10 +17,11 @@ use yii\widgets\ActiveForm;
 /* @var $this View */
 /* @var $model PlatformForm */
 
+$tool = Module::getInstance()->tool;
 $isNew = $model->scenario === Model::SCENARIO_DEFAULT;
 $id = $model->getPlatform()->getRecordId();
 
-$this->title = $isNew ? Yii::t('lti', 'Create LTI Platform') : Yii::t('lti', 'Platform #{num}', ['num' => $id]);
+$this->title = $isNew ? Yii::t('lti', 'New LTI Platform') : Yii::t('lti', 'Platform #{num}', ['num' => $id]);
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('lti', 'LTI Platforms'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $this->title];
@@ -26,7 +29,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 ?>
 
 <?php $form = ActiveForm::begin() ?>
-<div class="panel panel-default">
+<div class="panel panel-primary">
+    <div class='panel-heading'>
+        <h4><?= Html::encode($this->title) ?></h4>
+    </div>
     <div class="panel-body">
         <?= $form->field($model, 'name')->textInput() ?>
         <?= $form->field($model, 'key')->textInput() ?>
@@ -35,11 +41,13 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             <?= $form->field($model, 'secret')->textInput(['disabled' => true]) ?>
             <?= $form->field($model, 'newSecret')->checkbox() ?>
         <?php endif; ?>
-        <div class="alert alert-info">
-            <span class="glyphicon glyphicon-info-sign"></span>
-            <?= Yii::t('lti', 'Launch URL:') ?>
-            <strong><?= Html::encode(Url::to(['connect/index'], true)) ?></strong>
-        </div>
+        <?= $form->field($model, 'platformId')->textInput() ?>
+        <?= $form->field($model, 'clientId')->textInput() ?>
+        <?= $form->field($model, 'deploymentId')->textInput() ?>
+        <?= $form->field($model, 'authorizationServerId')->textInput() ?>
+        <?= $form->field($model, 'authenticationUrl')->textInput() ?>
+        <?= $form->field($model, 'accessTokenUrl')->textInput() ?>
+        <?= $form->field($model, 'publicKey')->textarea() ?>
     </div>
     <div class="panel-footer">
         <?= Html::submitButton($isNew ? Yii::t('lti', 'Create') : Yii::t('lti', 'Update'), ['class' => $isNew ? 'btn btn-success' : 'btn btn-warning']) ?>
@@ -55,4 +63,26 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
     </div>
 </div>
 <?php ActiveForm::end() ?>
+
+<div class='panel panel-info'>
+    <div class='panel-heading'>
+        <h4><?= Yii::t('lti', 'Tool Details') ?></h4>
+    </div>
+    <div class='panel-body'>
+        <p>
+            <?= Yii::t('lti', 'Launch URL:') ?>
+            <strong><?= Html::encode(Url::to(['tool/connect'], true)) ?></strong>
+        </p>
+        <?php if ($tool->rsaKey): ?>
+            <p>
+                <?= Yii::t('lti', 'Public keyset URL:') ?>
+                <strong><?= Html::encode($tool->jku) ?></strong>
+            </p>
+            <div>
+                <?= Yii::t('lti', 'Public key:') ?>
+                <pre><?= Html::encode(Jwt::getJwtClient()::getPublicKey($tool->rsaKey)) ?></pre>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
 

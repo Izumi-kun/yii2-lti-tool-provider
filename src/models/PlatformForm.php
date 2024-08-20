@@ -37,6 +37,34 @@ class PlatformForm extends Model
     /**
      * @var string
      */
+    public string $platformId = '';
+    /**
+     * @var string
+     */
+    public string $clientId = '';
+    /**
+     * @var string
+     */
+    public string $deploymentId = '';
+    /**
+     * @var string
+     */
+    public string $publicKey = '';
+    /**
+     * @var string
+     */
+    public string $authorizationServerId = '';
+    /**
+     * @var string
+     */
+    public string $authenticationUrl = '';
+    /**
+     * @var string
+     */
+    public string $accessTokenUrl = '';
+    /**
+     * @var string
+     */
     public string $enabled = '0';
     /**
      * @var Platform
@@ -52,6 +80,8 @@ class PlatformForm extends Model
             [['name', 'key'], 'required'],
             ['name', 'string', 'min' => 3, 'max' => 50],
             ['key', 'string', 'min' => 3],
+            [['platformId', 'clientId', 'deploymentId', 'authorizationServerId', 'authenticationUrl', 'accessTokenUrl'], 'string', 'max' => 255],
+            [['publicKey'], 'string', 'max' => 65535],
             ['newSecret', 'boolean', 'on' => [self::SCENARIO_UPDATE]],
             ['enabled', 'boolean'],
         ];
@@ -66,6 +96,13 @@ class PlatformForm extends Model
             'name' => Yii::t('lti', 'Name'),
             'key' => Yii::t('lti', 'Key'),
             'newSecret' => Yii::t('lti', 'Generate new secret'),
+            'platformId' => Yii::t('lti', 'Platform/Issuer ID'),
+            'clientId' => Yii::t('lti', 'Client ID'),
+            'deploymentId' => Yii::t('lti', 'Deployment ID'),
+            'publicKey' => Yii::t('lti', 'Public key'),
+            'authorizationServerId' => Yii::t('lti', 'Authorization server ID'),
+            'authenticationUrl' => Yii::t('lti', 'Authentication request URL'),
+            'accessTokenUrl' => Yii::t('lti', 'Access Token service URL'),
             'enabled' => Yii::t('lti', 'Enabled'),
             'secret' => Yii::t('lti', 'Secret'),
         ];
@@ -77,6 +114,13 @@ class PlatformForm extends Model
         $this->_platform = $platform;
         $this->key = $platform->getKey();
         $this->name = $platform->name;
+        $this->platformId = $platform->platformId ?: '';
+        $this->clientId = $platform->clientId ?: '';
+        $this->deploymentId = $platform->deploymentId ?: '';
+        $this->publicKey = $platform->rsaKey ?: '';
+        $this->authorizationServerId = $platform->authorizationServerId ?: '';
+        $this->authenticationUrl = $platform->authenticationUrl ?: '';
+        $this->accessTokenUrl = $platform->accessTokenUrl ?: '';
         $this->enabled = $platform->enabled;
     }
 
@@ -86,7 +130,7 @@ class PlatformForm extends Model
     public function getPlatform(): Platform
     {
         if (!isset($this->_platform)) {
-            $c = new Platform(Module::getInstance()->toolProvider->dataConnector);
+            $c = new Platform(Module::getInstance()->tool->dataConnector);
             $c->initialize();
             $this->_platform = $c;
         }
@@ -109,6 +153,13 @@ class PlatformForm extends Model
         $platform = $this->getPlatform();
         $platform->setKey($this->key);
         $platform->name = $this->name;
+        $platform->platformId = $this->platformId ?: null;
+        $platform->clientId = $this->clientId ?: null;
+        $platform->deploymentId = $this->deploymentId ?: null;
+        $platform->rsaKey = $this->publicKey ?: null;
+        $platform->authorizationServerId = $this->authorizationServerId ?: null;
+        $platform->authenticationUrl = $this->authenticationUrl ?: null;
+        $platform->accessTokenUrl = $this->accessTokenUrl ?: null;
         $platform->enabled = (bool)$this->enabled;
         if ($this->newSecret || $this->scenario === self::SCENARIO_DEFAULT) {
             $platform->secret = sha1(Yii::$app->security->generateRandomKey(128));

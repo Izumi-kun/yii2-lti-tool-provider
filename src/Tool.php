@@ -7,23 +7,22 @@
 
 namespace izumi\yii2lti;
 
-use ceLTIc\LTI\Tool;
 use Yii;
 use yii\base\Configurable;
 
 /**
- * ToolProvider
+ * Tool
  *
  * @author Viktor Khokhryakov <viktor.khokhryakov@gmail.com>
  */
-class ToolProvider extends Tool implements Configurable
+class Tool extends \ceLTIc\LTI\Tool implements Configurable
 {
 
     public function __construct($config = [])
     {
+        parent::__construct($config['dataConnector']);
+        unset($config['dataConnector']);
         Yii::configure($this, $config);
-
-        parent::__construct($this->dataConnector);
     }
 
     /**
@@ -32,7 +31,7 @@ class ToolProvider extends Tool implements Configurable
     protected function processRequest(string $eventName): void
     {
         Yii::debug("Action requested: '$eventName'", __METHOD__);
-        $event = new ToolProviderEvent($this);
+        $event = new ToolEvent($this);
         Module::getInstance()->trigger($eventName, $event);
         if (!$event->handled) {
             Yii::debug("Message type not supported: {$_POST['lti_message_type']}", __METHOD__);
@@ -95,7 +94,7 @@ class ToolProvider extends Tool implements Configurable
     protected function onError(): void
     {
         $this->message = Yii::t('lti', 'Sorry, there was an error connecting you to the application.');
-        Module::getInstance()->trigger(Module::EVENT_ERROR, new ToolProviderEvent($this));
+        Module::getInstance()->trigger(Module::EVENT_ERROR, new ToolEvent($this));
         $this->ok = false;
     }
 

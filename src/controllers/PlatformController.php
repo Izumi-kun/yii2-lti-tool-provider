@@ -38,7 +38,7 @@ class PlatformController extends Controller
 
     public function actionIndex(): string
     {
-        $platforms = Module::getInstance()->toolProvider->getPlatforms();
+        $platforms = Module::getInstance()->tool->getPlatforms();
         usort($platforms, function (Platform $a, Platform $b){
             return $a->getRecordId() > $b->getRecordId() ? 1 : -1;
         });
@@ -60,7 +60,7 @@ class PlatformController extends Controller
 
     public function actionUpdate($id): Response|string
     {
-        $platform = Platform::fromRecordId($id, Module::getInstance()->toolProvider->dataConnector);
+        $platform = Platform::fromRecordId($id, Module::getInstance()->tool->dataConnector);
         if ($platform->getRecordId() === null) {
             throw new NotFoundHttpException();
         }
@@ -78,7 +78,7 @@ class PlatformController extends Controller
 
     public function actionDelete($id): Response
     {
-        $c = Platform::fromRecordId($id, Module::getInstance()->toolProvider->dataConnector);
+        $c = Platform::fromRecordId($id, Module::getInstance()->tool->dataConnector);
         if ($c->getRecordId() === null) {
             throw new NotFoundHttpException();
         }

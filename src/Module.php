@@ -8,10 +8,16 @@
 namespace izumi\yii2lti;
 
 use ceLTIc\LTI\DataConnector\DataConnector;
+use ceLTIc\LTI\Enum\LtiVersion;
+use ceLTIc\LTI\Enum\ServiceAction;
 use ceLTIc\LTI\Http\HttpMessage;
+use ceLTIc\LTI\Outcome;
+use ceLTIc\LTI\Tool as BaseTool;
+use ceLTIc\LTI\UserResult;
 use Yii;
 use yii\db\Connection;
 use yii\di\Instance;
+use yii\helpers\Url;
 use yii\httpclient\Client;
 
 /**
@@ -30,9 +36,9 @@ class Module extends \yii\base\Module
     const EVENT_ERROR = 'error';
 
     /**
-     * @var ToolProvider|array
+     * @var Tool|array
      */
-    public array|ToolProvider $toolProvider = [];
+    public array|Tool $tool = [];
     /**
      * @var Client|array|string
      */
@@ -60,14 +66,49 @@ class Module extends \yii\base\Module
 
         $this->db = Instance::ensure($this->db, Connection::class);
 
-        $tpConfig = is_array($this->toolProvider) ? $this->toolProvider : [];
-        $tpConfig['dataConnector'] = DataConnector::getDataConnector($this->db->getMasterPdo(), $this->db->tablePrefix);
-        if (!isset($tpConfig['baseUrl'])) {
-            $tpConfig['baseUrl'] = Yii::$app->getRequest()->getHostInfo();
+        $toolConfig = is_array($this->tool) ? $this->tool : [];
+        $toolConfig['dataConnector'] = DataConnector::getDataConnector($this->db->getMasterPdo(), $this->db->tablePrefix);
+        if (!isset($toolConfig['baseUrl'])) {
+            $toolConfig['baseUrl'] = Yii::$app->getRequest()->getHostInfo();
         }
-        $this->toolProvider = Instance::ensure($tpConfig, ToolProvider::class);
+        if (!array_key_exists('jku', $toolConfig)) {
+            $toolConfig['jku'] = Url::to($this->getUniqueId() . '/tool/jwks', true);
+        }
+        $this->tool = Instance::ensure($toolConfig, Tool::class);
 
         $this->httpClient = Instance::ensure($this->httpClient, Client::class);
         HttpMessage::setHttpClient(new HttpClient());
+        BaseTool::$defaultTool = $this->tool;
+    }
+
+    /**
+     * Load the user from the database.
+     * @param int $id
+     * @return UserResult|null
+     */
+    public function findUserById(int $id): ?UserResult
+    {
+        $user = UserResult::fromRecordId($id, $this->tool->dataConnector);
+        if (!$user->getResourceLink()) {
+            return null;
+        }
+        return $user;
+    }
+
+    /**
+     * Perform an Outcomes service request.
+     * @param ServiceAction $action
+     * @param Outcome $ltiOutcome
+     * @param UserResult $user
+     * @return bool
+     */
+    public function doOutcomesService(ServiceAction $action, Outcome $ltiOutcome, UserResult $user): bool
+    {
+        $resourceLink = $user->getResourceLink();
+        if (!$resourceLink) {
+            return false;
+        }
+        $this->tool->signatureMethod = $resourceLink->getPlatform()->ltiVersion === LtiVersion::V1P3 ? 'RS256' : 'HMAC-SHA1';
+        return $resourceLink->doOutcomesService($action, $ltiOutcome, $user);
     }
 }
