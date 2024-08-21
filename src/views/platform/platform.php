@@ -41,13 +41,16 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             <?= $form->field($model, 'secret')->textInput(['disabled' => true]) ?>
             <?= $form->field($model, 'newSecret')->checkbox() ?>
         <?php endif; ?>
-        <?= $form->field($model, 'platformId')->textInput() ?>
-        <?= $form->field($model, 'clientId')->textInput() ?>
-        <?= $form->field($model, 'deploymentId')->textInput() ?>
-        <?= $form->field($model, 'authorizationServerId')->textInput() ?>
-        <?= $form->field($model, 'authenticationUrl')->textInput() ?>
-        <?= $form->field($model, 'accessTokenUrl')->textInput() ?>
-        <?= $form->field($model, 'publicKey')->textarea() ?>
+        <?php if ($tool->rsaKey): ?>
+            <?= $form->field($model, 'platformId')->textInput() ?>
+            <?= $form->field($model, 'clientId')->textInput() ?>
+            <?= $form->field($model, 'deploymentId')->textInput() ?>
+            <?= $form->field($model, 'authorizationServerId')->textInput() ?>
+            <?= $form->field($model, 'authenticationUrl')->textInput() ?>
+            <?= $form->field($model, 'accessTokenUrl')->textInput() ?>
+            <?= $form->field($model, 'publicKey')->textarea(['rows' => $model->publicKey ? substr_count ($model->publicKey, "\n") + 1 : 2]) ?>
+            <?= $form->field($model, 'publicKeysetUrl')->textInput() ?>
+        <?php endif; ?>
     </div>
     <div class="panel-footer">
         <?= Html::submitButton($isNew ? Yii::t('lti', 'Create') : Yii::t('lti', 'Update'), ['class' => $isNew ? 'btn btn-success' : 'btn btn-warning']) ?>

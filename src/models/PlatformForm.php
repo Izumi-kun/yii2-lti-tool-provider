@@ -53,6 +53,10 @@ class PlatformForm extends Model
     /**
      * @var string
      */
+    public string $publicKeysetUrl = '';
+    /**
+     * @var string
+     */
     public string $authorizationServerId = '';
     /**
      * @var string
@@ -80,11 +84,25 @@ class PlatformForm extends Model
             [['name', 'key'], 'required'],
             ['name', 'string', 'min' => 3, 'max' => 50],
             ['key', 'string', 'min' => 3],
-            [['platformId', 'clientId', 'deploymentId', 'authorizationServerId', 'authenticationUrl', 'accessTokenUrl'], 'string', 'max' => 255],
-            [['publicKey'], 'string', 'max' => 65535],
+            [['platformId', 'clientId', 'deploymentId', 'authorizationServerId', 'authenticationUrl', 'accessTokenUrl', 'publicKeysetUrl'], 'string', 'max' => 255, 'encoding' => '8bit'],
+            [['publicKey'], 'trim'],
+            [['publicKey'], 'string', 'max' => 65535, 'encoding' => '8bit'],
+            [['publicKey'], 'publicKeyValidator'],
             ['newSecret', 'boolean', 'on' => [self::SCENARIO_UPDATE]],
             ['enabled', 'boolean'],
         ];
+    }
+
+    /**
+     * @param string $attribute
+     * @return void
+     * @noinspection PhpUnused
+     */
+    public function publicKeyValidator(string $attribute): void
+    {
+        if (openssl_pkey_get_public($this->$attribute) === false) {
+            $this->addError($attribute, Yii::t('lti', 'Public key is not valid'));
+        }
     }
 
     /**
@@ -100,6 +118,7 @@ class PlatformForm extends Model
             'clientId' => Yii::t('lti', 'Client ID'),
             'deploymentId' => Yii::t('lti', 'Deployment ID'),
             'publicKey' => Yii::t('lti', 'Public key'),
+            'publicKeysetUrl' => Yii::t('lti', 'Public keyset URL'),
             'authorizationServerId' => Yii::t('lti', 'Authorization server ID'),
             'authenticationUrl' => Yii::t('lti', 'Authentication request URL'),
             'accessTokenUrl' => Yii::t('lti', 'Access Token service URL'),
@@ -118,6 +137,7 @@ class PlatformForm extends Model
         $this->clientId = $platform->clientId ?: '';
         $this->deploymentId = $platform->deploymentId ?: '';
         $this->publicKey = $platform->rsaKey ?: '';
+        $this->publicKeysetUrl = $platform->jku ?: '';
         $this->authorizationServerId = $platform->authorizationServerId ?: '';
         $this->authenticationUrl = $platform->authenticationUrl ?: '';
         $this->accessTokenUrl = $platform->accessTokenUrl ?: '';
@@ -157,6 +177,7 @@ class PlatformForm extends Model
         $platform->clientId = $this->clientId ?: null;
         $platform->deploymentId = $this->deploymentId ?: null;
         $platform->rsaKey = $this->publicKey ?: null;
+        $platform->jku = $this->publicKeysetUrl ?: null;
         $platform->authorizationServerId = $this->authorizationServerId ?: null;
         $platform->authenticationUrl = $this->authenticationUrl ?: null;
         $platform->accessTokenUrl = $this->accessTokenUrl ?: null;

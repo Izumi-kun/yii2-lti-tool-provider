@@ -80,6 +80,11 @@ class Module extends \yii\base\Module
         }
         $this->tool = Instance::ensure($toolConfig, Tool::class);
 
+        if ($this->tool->rsaKey && openssl_pkey_get_private($this->tool->rsaKey) === false) {
+            $this->tool->rsaKey = null;
+            Yii::warning('rsaKey is not valid private key');
+        }
+
         $this->httpClient = Instance::ensure($this->httpClient, Client::class);
         HttpMessage::setHttpClient(new HttpClient());
         BaseTool::$defaultTool = $this->tool;
