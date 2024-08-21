@@ -47,6 +47,10 @@ class Module extends \yii\base\Module
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.
      */
     public Connection|string|array $db = 'db';
+    /**
+     * @var string
+     */
+    public string $lti1p3SignatureMethod = 'RS256';
 
     /**
      * @inheritdoc
@@ -108,7 +112,7 @@ class Module extends \yii\base\Module
         if (!$resourceLink) {
             return false;
         }
-        $this->tool->signatureMethod = $resourceLink->getPlatform()->ltiVersion === LtiVersion::V1P3 ? 'RS256' : 'HMAC-SHA1';
+        $this->tool->signatureMethod = $resourceLink->getPlatform()->ltiVersion === LtiVersion::V1P3 ? $this->lti1p3SignatureMethod : 'HMAC-SHA1';
         return $resourceLink->doOutcomesService($action, $ltiOutcome, $user);
     }
 }

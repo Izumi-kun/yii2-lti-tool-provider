@@ -43,7 +43,8 @@ class ToolController extends Controller
     public function actionJwks(): Response
     {
         $jwk = Jwt::getJwtClient();
-        $tool = Module::getInstance()->tool;
-        return $this->asJson($tool->rsaKey ? $jwk::getJWKS($tool->rsaKey, $tool->signatureMethod, $tool->kid) : []);
+        $module = Module::getInstance();
+        $tool = $module->tool;
+        return $this->asJson($tool->rsaKey ? $jwk::getJWKS($tool->rsaKey, $module->lti1p3SignatureMethod, $tool->kid) : []);
     }
 }
