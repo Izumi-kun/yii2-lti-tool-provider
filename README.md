@@ -1,7 +1,7 @@
-Yii2 LTI Tool Provider
+Yii2 LTI Tool
 ======================
 
-LTI Tool Provider module for Yii2.
+LTI Tool module for Yii2.
 
 [![Latest Stable Version](https://poser.pugx.org/izumi-kun/yii2-lti-tool-provider/v/stable)](https://packagist.org/packages/izumi-kun/yii2-lti-tool-provider)
 [![Total Downloads](https://poser.pugx.org/izumi-kun/yii2-lti-tool-provider/downloads)](https://packagist.org/packages/izumi-kun/yii2-lti-tool-provider)
@@ -33,7 +33,7 @@ Add module to web config and configure. The module support those events for hand
 - `submissionReview`
 
 Make sure to configure access to `lti/platform` controller actions.
-All messages from Platforms handles by `lti/connect` controller and there is no access restrictions.
+All messages from Platforms handles by `lti/tool` controller and there is no access restrictions.
 
 ```php
 $config = [
@@ -45,7 +45,7 @@ $config = [
             'as access' => [
                 'class' => '\yii\filters\AccessControl',
                 'rules' => [
-                    ['allow' => true, 'controllers' => ['lti/connect']],
+                    ['allow' => true, 'controllers' => ['lti/tool']],
                     ['allow' => true, 'controllers' => ['lti/platform'], 'roles' => ['admin']],
                 ],
             ],
@@ -81,7 +81,6 @@ class SiteController extends Controller
         $isAdmin = $tool->user->isStaff() || $tool->user->isAdmin();
 
         Yii::$app->session->set('isAdmin', $isAdmin);
-        Yii::$app->session->set('isLtiSession', true);
         Yii::$app->session->set('userPk', $userPk);
         Yii::$app->controller->redirect(['/site/index']);
 

@@ -1,6 +1,6 @@
 {
   "name": "izumi-kun/yii2-lti-tool-provider",
-  "description": "LTI Tool Provider module for Yii2",
+  "description": "LTI Tool module for Yii2",
   "type": "yii2-extension",
   "require": {
     "php": ">=8.1",
