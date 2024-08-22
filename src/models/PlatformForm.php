@@ -33,6 +33,10 @@ class PlatformForm extends Model
     /**
      * @var string
      */
+    public string $secret = '';
+    /**
+     * @var string
+     */
     public string $newSecret = '0';
     /**
      * @var string
@@ -85,6 +89,7 @@ class PlatformForm extends Model
             ['name', 'string', 'min' => 3, 'max' => 50],
             ['key', 'string', 'min' => 3],
             [['platformId', 'clientId', 'deploymentId', 'authorizationServerId', 'authenticationUrl', 'accessTokenUrl', 'publicKeysetUrl'], 'string', 'max' => 255, 'encoding' => '8bit'],
+            [['secret'], 'string', 'max' => 1024, 'encoding' => '8bit'],
             [['publicKey'], 'trim'],
             [['publicKey'], 'string', 'max' => 65535, 'encoding' => '8bit'],
             [['publicKey'], 'publicKeyValidator'],
@@ -132,6 +137,7 @@ class PlatformForm extends Model
         $this->scenario = self::SCENARIO_UPDATE;
         $this->_platform = $platform;
         $this->key = $platform->getKey() ?: '';
+        $this->secret = $platform->secret ?: '';
         $this->name = $platform->name ?: '';
         $this->platformId = $platform->platformId ?: '';
         $this->clientId = $platform->clientId ?: '';
@@ -157,15 +163,6 @@ class PlatformForm extends Model
         return $this->_platform;
     }
 
-    /**
-     * @return string|null
-     * @noinspection PhpUnused
-     */
-    public function getSecret(): ?string
-    {
-        return $this->getPlatform()->secret;
-    }
-
     public function save(): bool
     {
         if (!$this->validate()) {
@@ -173,6 +170,10 @@ class PlatformForm extends Model
         }
         $platform = $this->getPlatform();
         $platform->setKey($this->key ?: null);
+        if ($this->newSecret || $this->scenario === self::SCENARIO_DEFAULT) {
+            $this->secret = sha1(Yii::$app->security->generateRandomKey(128));
+        }
+        $platform->secret = $this->secret ?: null;
         $platform->name = $this->name ?: null;
         $platform->platformId = $this->platformId ?: null;
         $platform->clientId = $this->clientId ?: null;
@@ -183,9 +184,6 @@ class PlatformForm extends Model
         $platform->authenticationUrl = $this->authenticationUrl ?: null;
         $platform->accessTokenUrl = $this->accessTokenUrl ?: null;
         $platform->enabled = (bool)$this->enabled;
-        if ($this->newSecret || $this->scenario === self::SCENARIO_DEFAULT) {
-            $platform->secret = sha1(Yii::$app->security->generateRandomKey(128));
-        }
         try {
             $ok = $platform->save();
         } catch (PDOException){

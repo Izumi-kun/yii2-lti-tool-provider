@@ -31,26 +31,38 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 <?php $form = ActiveForm::begin() ?>
 <div class="panel panel-primary">
     <div class='panel-heading'>
-        <h4><?= Html::encode($this->title) ?></h4>
+        <h2 class="panel-title"><?= Html::encode($this->title) ?></h2>
     </div>
     <div class="panel-body">
         <?= $form->field($model, 'name')->textInput() ?>
-        <?= $form->field($model, 'key')->textInput() ?>
-        <?= $form->field($model, 'enabled')->checkbox() ?>
-        <?php if (!$isNew): ?>
-            <?= $form->field($model, 'secret')->textInput(['disabled' => true]) ?>
-            <?= $form->field($model, 'newSecret')->checkbox() ?>
-        <?php endif; ?>
+        <div class="panel panel-info">
+            <div class='panel-heading'>
+                <strong>LTI 1.0/1.1/1.2/2.0</strong>
+            </div>
+            <div class='panel-body'>
+                <?= $form->field($model, 'key')->textInput() ?>
+                <?= $form->field($model, 'secret')->textInput() ?>
+                <?= $form->field($model, 'newSecret')->checkbox() ?>
+            </div>
+        </div>
         <?php if ($tool->rsaKey): ?>
-            <?= $form->field($model, 'platformId')->textInput() ?>
-            <?= $form->field($model, 'clientId')->textInput() ?>
-            <?= $form->field($model, 'deploymentId')->textInput() ?>
-            <?= $form->field($model, 'authorizationServerId')->textInput() ?>
-            <?= $form->field($model, 'authenticationUrl')->textInput() ?>
-            <?= $form->field($model, 'accessTokenUrl')->textInput() ?>
-            <?= $form->field($model, 'publicKey')->textarea(['rows' => $model->publicKey ? substr_count ($model->publicKey, "\n") + 1 : 2]) ?>
-            <?= $form->field($model, 'publicKeysetUrl')->textInput() ?>
+            <div class='panel panel-info'>
+                <div class='panel-heading'>
+                    <strong>LTI 1.3</strong>
+                </div>
+                <div class='panel-body'>
+                    <?= $form->field($model, 'platformId')->textInput() ?>
+                    <?= $form->field($model, 'clientId')->textInput() ?>
+                    <?= $form->field($model, 'deploymentId')->textInput() ?>
+                    <?= $form->field($model, 'authorizationServerId')->textInput() ?>
+                    <?= $form->field($model, 'authenticationUrl')->textInput() ?>
+                    <?= $form->field($model, 'accessTokenUrl')->textInput() ?>
+                    <?= $form->field($model, 'publicKey')->textarea(['rows' => $model->publicKey ? substr_count ($model->publicKey, "\n") + 1 : 2]) ?>
+                    <?= $form->field($model, 'publicKeysetUrl')->textInput() ?>
+                </div>
+            </div>
         <?php endif; ?>
+        <?= $form->field($model, 'enabled')->checkbox() ?>
     </div>
     <div class="panel-footer">
         <?= Html::submitButton($isNew ? Yii::t('lti', 'Create') : Yii::t('lti', 'Update'), ['class' => $isNew ? 'btn btn-success' : 'btn btn-warning']) ?>
@@ -69,7 +81,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 
 <div class='panel panel-info'>
     <div class='panel-heading'>
-        <h4><?= Yii::t('lti', 'Tool Details') ?></h4>
+        <h2 class="panel-title"><?= Yii::t('lti', 'Tool Details') ?></h2>
     </div>
     <div class='panel-body'>
         <p>
