@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
  * @copyright Copyright (c) 2024 Viktor Khokhryakov
@@ -26,8 +27,8 @@ class M240000000000Init extends Migration
         $this->createTable($consumer, [
             'consumer_pk' => $this->primaryKey(),
             'name' => $this->string(255)->notNull(),
-            'consumer_key' => $this->string(255)->notNull()->unique(),
-            'secret' => $this->string(1024)->notNull(),
+            'consumer_key' => $this->string(255)->null(),
+            'secret' => $this->string(1024)->null(),
             'platform_id' => $this->string(255)->null(),
             'client_id' => $this->string(255)->null(),
             'deployment_id' => $this->string(255)->null(),

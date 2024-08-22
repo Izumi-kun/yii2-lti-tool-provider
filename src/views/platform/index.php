@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     </div>
                     <div>
                         <?= Yii::t('lti', 'Key:') ?>
-                        <?= $platform->getKey() ?>
+                        <?= Yii::$app->formatter->asRaw($platform->getKey()) ?>
                     </div>
                     <div>
                         <?= Yii::t('lti', 'Created:') ?>

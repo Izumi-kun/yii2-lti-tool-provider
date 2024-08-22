@@ -81,7 +81,7 @@ class PlatformForm extends Model
     public function rules(): array
     {
         return [
-            [['name', 'key'], 'required'],
+            [['name'], 'required'],
             ['name', 'string', 'min' => 3, 'max' => 50],
             ['key', 'string', 'min' => 3],
             [['platformId', 'clientId', 'deploymentId', 'authorizationServerId', 'authenticationUrl', 'accessTokenUrl', 'publicKeysetUrl'], 'string', 'max' => 255, 'encoding' => '8bit'],
@@ -131,8 +131,8 @@ class PlatformForm extends Model
     {
         $this->scenario = self::SCENARIO_UPDATE;
         $this->_platform = $platform;
-        $this->key = $platform->getKey();
-        $this->name = $platform->name;
+        $this->key = $platform->getKey() ?: '';
+        $this->name = $platform->name ?: '';
         $this->platformId = $platform->platformId ?: '';
         $this->clientId = $platform->clientId ?: '';
         $this->deploymentId = $platform->deploymentId ?: '';
@@ -159,6 +159,7 @@ class PlatformForm extends Model
 
     /**
      * @return string|null
+     * @noinspection PhpUnused
      */
     public function getSecret(): ?string
     {
@@ -171,8 +172,8 @@ class PlatformForm extends Model
             return false;
         }
         $platform = $this->getPlatform();
-        $platform->setKey($this->key);
-        $platform->name = $this->name;
+        $platform->setKey($this->key ?: null);
+        $platform->name = $this->name ?: null;
         $platform->platformId = $this->platformId ?: null;
         $platform->clientId = $this->clientId ?: null;
         $platform->deploymentId = $this->deploymentId ?: null;
