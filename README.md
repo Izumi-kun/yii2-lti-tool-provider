@@ -23,7 +23,7 @@ Add namespaced migrations: `izumi\yii2lti\migrations`. Apply new migrations.
 
 ### Application config
 
-Add module to web config and configure. The module support those events for handling messages from Platforms:
+Add the module to the web config and configure it. The module supports the following events for handling messages from Platforms:
 
 - `launch`
 - `configure`
@@ -32,14 +32,18 @@ Add module to web config and configure. The module support those events for hand
 - `contentItemUpdate`
 - `submissionReview`
 
-Make sure to configure access to `lti/platform` controller actions.
-All messages from Platforms handles by `lti/tool` controller and there is no access restrictions.
+Make sure to configure access to the `lti/platform` controller actions.
+All messages from Platforms are handled by the `lti/tool` controller, and there are no access restrictions.
 
 ```php
 $config = [
     'modules' => [
         'lti' => [
             'class' => '\izumi\yii2lti\Module',
+            'tool' => [
+                'debugMode' => YII_DEBUG,
+                'rsaKey' => 'A PEM formatted private key (for LTI 1.3 support)',
+            ],
             'on launch' => ['\app\controllers\SiteController', 'ltiLaunch'],
             'on error' => ['\app\controllers\SiteController', 'ltiError'],
             'as access' => [
@@ -56,7 +60,7 @@ $config = [
 
 ### Event handlers
 
-Create event handlers to respect module config.
+Create event handlers according to the module configuration.
 
 ```php
 namespace app\controllers;
