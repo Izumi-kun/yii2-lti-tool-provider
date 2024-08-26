@@ -236,7 +236,6 @@ class PlatformForm extends Model
             && $platform->clientId
             && $platform->deploymentId
             && ($platform->rsaKey || $platform->jku)
-            && $platform->authorizationServerId
             && $platform->authenticationUrl
             && $platform->accessTokenUrl;
     }
