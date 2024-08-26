@@ -20,8 +20,6 @@ use yii\base\Model;
  */
 class PlatformForm extends Model
 {
-    const SCENARIO_UPDATE = 'update';
-
     /**
      * @var string
      */
@@ -88,12 +86,14 @@ class PlatformForm extends Model
             [['name'], 'required'],
             ['name', 'string', 'min' => 3, 'max' => 50],
             ['key', 'string', 'min' => 3],
+            ['key', 'platformKeyValidator'],
             [['platformId', 'clientId', 'deploymentId', 'authorizationServerId', 'authenticationUrl', 'accessTokenUrl', 'publicKeysetUrl'], 'string', 'max' => 255, 'encoding' => '8bit'],
-            [['secret'], 'string', 'max' => 1024, 'encoding' => '8bit'],
-            [['publicKey'], 'trim'],
-            [['publicKey'], 'string', 'max' => 65535, 'encoding' => '8bit'],
-            [['publicKey'], 'publicKeyValidator'],
-            ['newSecret', 'boolean', 'on' => [self::SCENARIO_UPDATE]],
+            ['platformId', 'platformIdValidator'],
+            ['secret', 'string', 'max' => 1024, 'encoding' => '8bit'],
+            ['publicKey', 'trim'],
+            ['publicKey', 'string', 'max' => 65535, 'encoding' => '8bit'],
+            ['publicKey', 'publicKeyValidator'],
+            ['newSecret', 'boolean'],
             ['enabled', 'boolean'],
         ];
     }
@@ -106,7 +106,40 @@ class PlatformForm extends Model
     public function publicKeyValidator(string $attribute): void
     {
         if (openssl_pkey_get_public($this->$attribute) === false) {
-            $this->addError($attribute, Yii::t('lti', 'Public key is not valid'));
+            $this->addError($attribute, Yii::t('lti', 'Public key is not valid.'));
+        }
+    }
+
+    /**
+     * @param string $attribute
+     * @return void
+     * @noinspection PhpUnused
+     */
+    public function platformKeyValidator(string $attribute): void
+    {
+        $key = $this->$attribute;
+        if (!$key) {
+            return;
+        }
+        $platform = Platform::fromConsumerKey($key, Module::getInstance()->tool->dataConnector);
+        if ($platform->created && $this->getPlatform()->getRecordId() !== $platform->getRecordId()) {
+            $this->addError($attribute, Yii::t('lti', 'Consumer key has already been taken.'));
+        }
+    }
+
+    /**
+     * @param string $attribute
+     * @return void
+     * @noinspection PhpUnused
+     */
+    public function platformIdValidator(string $attribute): void
+    {
+        if (!$this->platformId || !$this->clientId || !$this->deploymentId) {
+            return;
+        }
+        $platform = Platform::fromPlatformId($this->platformId, $this->clientId, $this->deploymentId, Module::getInstance()->tool->dataConnector);
+        if ($platform->created && $this->getPlatform()->getRecordId() !== $platform->getRecordId()) {
+            $this->addError($attribute, Yii::t('lti', 'The combination of platform, client and deployment IDs has already been taken.'));
         }
     }
 
@@ -117,8 +150,8 @@ class PlatformForm extends Model
     {
         return [
             'name' => Yii::t('lti', 'Name'),
-            'key' => Yii::t('lti', 'Key'),
-            'newSecret' => Yii::t('lti', 'Generate new secret'),
+            'key' => Yii::t('lti', 'Consumer key'),
+            'newSecret' => Yii::t('lti', 'Generate new shared secret'),
             'platformId' => Yii::t('lti', 'Platform/Issuer ID'),
             'clientId' => Yii::t('lti', 'Client ID'),
             'deploymentId' => Yii::t('lti', 'Deployment ID'),
@@ -128,13 +161,12 @@ class PlatformForm extends Model
             'authenticationUrl' => Yii::t('lti', 'Authentication request URL'),
             'accessTokenUrl' => Yii::t('lti', 'Access Token service URL'),
             'enabled' => Yii::t('lti', 'Enabled'),
-            'secret' => Yii::t('lti', 'Secret'),
+            'secret' => Yii::t('lti', 'Shared secret'),
         ];
     }
 
     public function setPlatform(Platform $platform)
     {
-        $this->scenario = self::SCENARIO_UPDATE;
         $this->_platform = $platform;
         $this->key = $platform->getKey() ?: '';
         $this->secret = $platform->secret ?: '';
@@ -156,9 +188,7 @@ class PlatformForm extends Model
     public function getPlatform(): Platform
     {
         if (!isset($this->_platform)) {
-            $c = new Platform(Module::getInstance()->tool->dataConnector);
-            $c->initialize();
-            $this->_platform = $c;
+            $this->_platform = new Platform(Module::getInstance()->tool->dataConnector);
         }
         return $this->_platform;
     }

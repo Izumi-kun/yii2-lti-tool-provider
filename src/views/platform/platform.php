@@ -18,8 +18,8 @@ use yii\widgets\ActiveForm;
 /* @var $model PlatformForm */
 
 $tool = Module::getInstance()->tool;
-$isNew = $model->scenario === Model::SCENARIO_DEFAULT;
 $platform = $model->getPlatform();
+$isNew = !$platform->created;
 $id = $platform->getRecordId();
 
 $this->title = $isNew ? Yii::t('lti', 'New LTI Platform') : Yii::t('lti', 'Platform #{num}', ['num' => $id]);
@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 ?>
 
 <?php $form = ActiveForm::begin() ?>
+<?= $form->errorSummary([$model]) ?>
 <div class="panel panel-primary">
     <div class='panel-heading'>
         <h2 class="panel-title"><?= Html::encode($this->title) ?></h2>

@@ -34,9 +34,9 @@ class Tool extends \ceLTIc\LTI\Tool implements Configurable
         $event = new ToolEvent($this);
         Module::getInstance()->trigger($eventName, $event);
         if (!$event->handled) {
-            Yii::debug("Message type not supported: {$_POST['lti_message_type']}", __METHOD__);
+            Yii::debug("Message type not supported: {$this->messageParameters['lti_message_type']}", __METHOD__);
             $this->ok = false;
-            $this->reason = "Message type not supported: {$_POST['lti_message_type']}";
+            $this->reason = Yii::t('lti', 'Message type not supported: {messageType}', ['messageType' => $this->messageParameters['lti_message_type']]);
         }
     }
 

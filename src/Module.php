@@ -19,6 +19,7 @@ use yii\db\Connection;
 use yii\di\Instance;
 use yii\helpers\Url;
 use yii\httpclient\Client;
+use yii\i18n\PhpMessageSource;
 
 /**
  * Module.
@@ -62,7 +63,7 @@ class Module extends \yii\base\Module
         $i18n = Yii::$app->i18n;
         if (!isset($i18n->translations['lti']) && !isset($i18n->translations['lti*'])) {
             $i18n->translations['lti'] = [
-                'class' => '\yii\i18n\PhpMessageSource',
+                'class' => PhpMessageSource::class,
                 'basePath' => __DIR__ . '/messages',
                 'sourceLanguage' => 'en',
             ];
@@ -82,7 +83,7 @@ class Module extends \yii\base\Module
 
         if ($this->tool->rsaKey && openssl_pkey_get_private($this->tool->rsaKey) === false) {
             $this->tool->rsaKey = null;
-            Yii::warning('rsaKey is not valid private key');
+            Yii::warning('rsaKey is not valid private key', __METHOD__);
         }
 
         $this->httpClient = Instance::ensure($this->httpClient, Client::class);
