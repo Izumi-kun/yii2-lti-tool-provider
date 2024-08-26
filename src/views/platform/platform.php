@@ -19,7 +19,8 @@ use yii\widgets\ActiveForm;
 
 $tool = Module::getInstance()->tool;
 $isNew = $model->scenario === Model::SCENARIO_DEFAULT;
-$id = $model->getPlatform()->getRecordId();
+$platform = $model->getPlatform();
+$id = $platform->getRecordId();
 
 $this->title = $isNew ? Yii::t('lti', 'New LTI Platform') : Yii::t('lti', 'Platform #{num}', ['num' => $id]);
 
@@ -35,7 +36,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
     </div>
     <div class="panel-body">
         <?= $form->field($model, 'name')->textInput() ?>
-        <div class="panel panel-info">
+        <div class="panel <?= PlatformForm::isPlatform1p0Ready($platform) ? 'panel-success' : 'panel-info' ?>">
             <div class='panel-heading'>
                 <strong>LTI 1.0/1.1/1.2/2.0</strong>
             </div>
@@ -46,7 +47,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             </div>
         </div>
         <?php if ($tool->rsaKey): ?>
-            <div class='panel panel-info'>
+            <div class='panel <?= PlatformForm::isPlatform1p3Ready($platform) ? 'panel-success' : 'panel-info' ?>'>
                 <div class='panel-heading'>
                     <strong>LTI 1.3</strong>
                 </div>

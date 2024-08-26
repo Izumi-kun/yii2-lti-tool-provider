@@ -169,12 +169,15 @@ class PlatformForm extends Model
             return false;
         }
         $platform = $this->getPlatform();
+        $platform->name = $this->name ?: null;
+        $platform->enabled = (bool)$this->enabled;
+        // LTI 1.0/1.1/1.2/2.0
         $platform->setKey($this->key ?: null);
-        if ($this->newSecret || $this->scenario === self::SCENARIO_DEFAULT) {
+        if ($this->newSecret) {
             $this->secret = sha1(Yii::$app->security->generateRandomKey(128));
         }
         $platform->secret = $this->secret ?: null;
-        $platform->name = $this->name ?: null;
+        // LTI 1.3
         $platform->platformId = $this->platformId ?: null;
         $platform->clientId = $this->clientId ?: null;
         $platform->deploymentId = $this->deploymentId ?: null;
@@ -183,7 +186,6 @@ class PlatformForm extends Model
         $platform->authorizationServerId = $this->authorizationServerId ?: null;
         $platform->authenticationUrl = $this->authenticationUrl ?: null;
         $platform->accessTokenUrl = $this->accessTokenUrl ?: null;
-        $platform->enabled = (bool)$this->enabled;
         try {
             $ok = $platform->save();
         } catch (PDOException){
@@ -191,5 +193,32 @@ class PlatformForm extends Model
             return false;
         }
         return $ok;
+    }
+
+    /**
+     * Platform is ready for LTI 1.3
+     * @param Platform $platform
+     * @return bool
+     */
+    public static function isPlatform1p3Ready(Platform $platform): bool
+    {
+        return $platform->platformId
+            && $platform->clientId
+            && $platform->deploymentId
+            && ($platform->rsaKey || $platform->jku)
+            && $platform->authorizationServerId
+            && $platform->authenticationUrl
+            && $platform->accessTokenUrl;
+    }
+
+    /**
+     * Platform is ready for LTI 1.0/1.1/1.2/2.0
+     * @param Platform $platform
+     * @return bool
+     */
+    public static function isPlatform1p0Ready(Platform $platform): bool
+    {
+        return $platform->getKey()
+            && $platform->secret;
     }
 }
