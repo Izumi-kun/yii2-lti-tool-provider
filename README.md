@@ -39,15 +39,15 @@ All messages from Platforms are handled by the `lti/tool` controller, and there 
 $config = [
     'modules' => [
         'lti' => [
-            'class' => '\izumi\yii2lti\Module',
+            'class' => \izumi\yii2lti\Module::class,
             'tool' => [
                 'debugMode' => YII_DEBUG,
                 'rsaKey' => 'A PEM formatted private key (for LTI 1.3 support)',
             ],
-            'on launch' => ['\app\controllers\SiteController', 'ltiLaunch'],
-            'on error' => ['\app\controllers\SiteController', 'ltiError'],
+            'on launch' => [SiteController::class, 'ltiLaunch'],
+            'on error' => [SiteController::class, 'ltiError'],
             'as access' => [
-                'class' => '\yii\filters\AccessControl',
+                'class' => \yii\filters\AccessControl::class,
                 'rules' => [
                     ['allow' => true, 'controllers' => ['lti/tool']],
                     ['allow' => true, 'controllers' => ['lti/platform'], 'roles' => ['admin']],

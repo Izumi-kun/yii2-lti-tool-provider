@@ -8,7 +8,6 @@
 use ceLTIc\LTI\Jwt\Jwt;
 use izumi\yii2lti\models\PlatformForm;
 use izumi\yii2lti\Module;
-use yii\base\Model;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
@@ -59,7 +58,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     <?= $form->field($model, 'authorizationServerId')->textInput() ?>
                     <?= $form->field($model, 'authenticationUrl')->textInput() ?>
                     <?= $form->field($model, 'accessTokenUrl')->textInput() ?>
-                    <?= $form->field($model, 'publicKey')->textarea(['rows' => $model->publicKey ? substr_count ($model->publicKey, "\n") + 1 : 2]) ?>
+                    <?= $form->field($model, 'publicKey')->textarea(['rows' => $model->publicKey ? substr_count($model->publicKey, "\n") + 1 : 2]) ?>
                     <?= $form->field($model, 'publicKeysetUrl')->textInput() ?>
                 </div>
             </div>
