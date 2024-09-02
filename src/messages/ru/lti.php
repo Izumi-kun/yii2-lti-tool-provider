@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
@@ -23,25 +23,40 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Launch URL:' => 'URL запуска:',
-    'Are you sure you want to delete this consumer?' => 'Вы уверены, что хотите удалить этого пользователя?',
+    'Access Token service URL' => 'URL сервиса токена доступа',
+    'Are you sure you want to delete this platform?' => 'Вы уверены, что хотите удалить эту платформу?',
+    'Authentication request URL' => 'URL запроса аутентификации',
+    'Authorization server ID' => 'ID сервера авторизации',
     'Cancel' => 'Отмена',
-    'Consumer #{num}' => 'Пользователь #{num}',
+    'Client ID' => 'ID клиента',
+    'Consumer key' => 'Ключ потребителя',
+    'Consumer key has already been taken.' => 'Ключ потребителя уже занят.',
     'Create' => 'Создать',
-    'Create LTI Consumer' => 'Создать LTI пользователя',
     'Created:' => 'Создан:',
     'Delete' => 'Удалить',
+    'Deployment ID' => 'ID развертывания',
     'Disabled' => 'Отключен',
     'Enabled' => 'Включен',
-    'Generate new secret' => 'Сгенерировать новый секрет',
-    'Key' => 'Ключ',
+    'Generate new shared secret' => 'Сгенерировать новый общий секрет',
     'Key:' => 'Ключ:',
-    'LTI Consumers' => 'Пользователи LTI',
+    'LTI Platforms' => 'LTI платформы',
     'Last access:' => 'Последний доступ:',
+    'Launch URL:' => 'URL запуска:',
+    'Message type not supported: {messageType}' => 'Тип сообщения не поддерживается: {messageType}',
     'Name' => 'Имя',
-    'Secret' => 'Секрет',
+    'New LTI Platform' => 'Новая LTI платформа',
+    'Platform #{num}' => 'Платформа #{num}',
+    'Platform/Issuer ID' => 'ID платформы/издателя',
+    'Public key' => 'Открытый ключ',
+    'Public key is not valid.' => 'Открытый ключ недействителен.',
+    'Public key:' => 'Открытый ключ:',
+    'Public keyset URL' => 'URL набора открытых ключей',
+    'Public keyset URL:' => 'URL набора открытых ключей:',
+    'Shared secret' => 'Общий секрет',
     'Sorry, there was an error connecting you to the application.' => 'К сожалению, произошла ошибка подключения к приложению.',
     'Status:' => 'Статус:',
+    'The combination of platform, client and deployment IDs has already been taken.' => 'Комбинация идентификаторов платформы, клиента и развертывания уже занята.',
+    'Tool Details' => 'Детали инструмента',
     'Update' => 'Обновить',
     'Updated:' => 'Обновлен:',
 ];

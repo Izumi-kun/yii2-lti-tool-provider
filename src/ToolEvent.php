@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2019 Viktor Khokhryakov
+ * @copyright Copyright (c) 2024 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
@@ -10,21 +10,21 @@ namespace izumi\yii2lti;
 use yii\base\Event;
 
 /**
- * ToolProviderEvent.
+ * ToolEvent.
  *
- * @property ToolProvider $sender
+ * @property Tool $sender
  *
  * @author Viktor Khokhryakov <viktor.khokhryakov@gmail.com>
  */
-class ToolProviderEvent extends Event
+class ToolEvent extends Event
 {
     /**
      * @inheritdoc
-     * @param ToolProvider $toolProvider
+     * @param Tool $tool
      */
-    public function __construct(ToolProvider $toolProvider, $config = [])
+    public function __construct(Tool $tool, $config = [])
     {
-        $this->sender = $toolProvider;
+        $this->sender = $tool;
 
         parent::__construct($config);
     }
