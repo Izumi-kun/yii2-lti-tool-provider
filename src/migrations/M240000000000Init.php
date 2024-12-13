@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/** @noinspection PhpUnused */
 
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
@@ -84,8 +85,8 @@ class M240000000000Init extends Migration
             'created' => $this->dateTime()->notNull(),
             'updated' => $this->dateTime()->notNull(),
         ], $tableOptions);
-        $this->addForeignKey("lti2_context_lti2_consumer_FK1", $context, 'consumer_pk', $consumer, 'consumer_pk');
-        $this->createIndex("lti2_context_consumer_id_IDX", $context, 'consumer_pk');
+        $this->addForeignKey('lti2_context_lti2_consumer_FK1', $context, 'consumer_pk', $consumer, 'consumer_pk');
+        $this->createIndex('lti2_context_consumer_id_IDX', $context, 'consumer_pk');
 
         $resourceLink = '{{%lti2_resource_link}}';
         $this->createTable($resourceLink, [
@@ -100,11 +101,11 @@ class M240000000000Init extends Migration
             'created' => $this->dateTime()->notNull(),
             'updated' => $this->dateTime()->notNull(),
         ], $tableOptions);
-        $this->addForeignKey("lti2_resource_link_lti2_consumer_FK1", $resourceLink, 'consumer_pk', $consumer, 'consumer_pk');
-        $this->addForeignKey("lti2_resource_link_lti2_context_FK1", $resourceLink, 'context_pk', $context, 'context_pk');
-        $this->addForeignKey("lti2_resource_link_lti2_resource_link_FK1", $resourceLink, 'primary_resource_link_pk', $resourceLink, 'resource_link_pk');
-        $this->createIndex("lti2_resource_link_consumer_pk_IDX", $resourceLink, 'consumer_pk');
-        $this->createIndex("lti2_resource_link_context_pk_IDX", $resourceLink, 'context_pk');
+        $this->addForeignKey('lti2_resource_link_lti2_consumer_FK1', $resourceLink, 'consumer_pk', $consumer, 'consumer_pk');
+        $this->addForeignKey('lti2_resource_link_lti2_context_FK1', $resourceLink, 'context_pk', $context, 'context_pk');
+        $this->addForeignKey('lti2_resource_link_lti2_resource_link_FK1', $resourceLink, 'primary_resource_link_pk', $resourceLink, 'resource_link_pk');
+        $this->createIndex('lti2_resource_link_consumer_pk_IDX', $resourceLink, 'consumer_pk');
+        $this->createIndex('lti2_resource_link_context_pk_IDX', $resourceLink, 'context_pk');
 
         $userResult = '{{%lti2_user_result}}';
         $this->createTable($userResult, [
@@ -115,8 +116,8 @@ class M240000000000Init extends Migration
             'created' => $this->dateTime()->notNull(),
             'updated' => $this->dateTime()->notNull(),
         ], $tableOptions);
-        $this->addForeignKey("lti2_user_result_lti2_resource_link_FK1", $userResult, 'resource_link_pk', $resourceLink, 'resource_link_pk');
-        $this->createIndex("lti2_user_result_resource_link_pk_IDX", $userResult, 'resource_link_pk');
+        $this->addForeignKey('lti2_user_result_lti2_resource_link_FK1', $userResult, 'resource_link_pk', $resourceLink, 'resource_link_pk');
+        $this->createIndex('lti2_user_result_resource_link_pk_IDX', $userResult, 'resource_link_pk');
 
         $shareKey = '{{%lti2_share_key}}';
         $this->createTable($shareKey, [
@@ -126,8 +127,8 @@ class M240000000000Init extends Migration
             'expires' => $this->dateTime()->notNull(),
             'PRIMARY KEY ([[share_key_id]])',
         ], $tableOptions);
-        $this->addForeignKey("lti2_share_key_lti2_resource_link_FK1", $shareKey, 'resource_link_pk', $resourceLink, 'resource_link_pk');
-        $this->createIndex("lti2_share_key_resource_link_pk_IDX", $shareKey, 'resource_link_pk');
+        $this->addForeignKey('lti2_share_key_lti2_resource_link_FK1', $shareKey, 'resource_link_pk', $resourceLink, 'resource_link_pk');
+        $this->createIndex('lti2_share_key_resource_link_pk_IDX', $shareKey, 'resource_link_pk');
     }
 
     public function down()

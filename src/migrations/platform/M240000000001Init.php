@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/** @noinspection PhpUnused */
 
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider

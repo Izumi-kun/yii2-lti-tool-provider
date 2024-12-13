@@ -17,7 +17,6 @@ use yii\base\Configurable;
  */
 class Tool extends \ceLTIc\LTI\Tool implements Configurable
 {
-
     public function __construct($config = [])
     {
         parent::__construct($config['dataConnector']);

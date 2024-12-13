@@ -17,7 +17,6 @@ use ceLTIc\LTI\Http\HttpMessage;
  */
 class HttpClient implements ClientInterface
 {
-
     /**
      * @inheritdoc
      */

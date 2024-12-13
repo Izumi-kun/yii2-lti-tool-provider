@@ -28,13 +28,13 @@ use yii\i18n\PhpMessageSource;
  */
 class Module extends \yii\base\Module
 {
-    const EVENT_LAUNCH = 'launch';
-    const EVENT_CONFIGURE = 'configure';
-    const EVENT_DASHBOARD = 'dashboard';
-    const EVENT_CONTENT_ITEM = 'contentItem';
-    const EVENT_CONTENT_ITEM_UPDATE = 'contentItemUpdate';
-    const EVENT_SUBMISSION_REVIEW = 'submissionReview';
-    const EVENT_ERROR = 'error';
+    public const EVENT_LAUNCH = 'launch';
+    public const EVENT_CONFIGURE = 'configure';
+    public const EVENT_DASHBOARD = 'dashboard';
+    public const EVENT_CONTENT_ITEM = 'contentItem';
+    public const EVENT_CONTENT_ITEM_UPDATE = 'contentItemUpdate';
+    public const EVENT_SUBMISSION_REVIEW = 'submissionReview';
+    public const EVENT_ERROR = 'error';
 
     /**
      * @var Tool|array

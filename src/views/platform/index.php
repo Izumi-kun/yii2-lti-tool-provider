@@ -23,15 +23,15 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 ?>
 
 <div class="row">
-    <?php foreach ($platforms as $platform): ?>
+    <?php foreach ($platforms as $platform) : ?>
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="pull-right">
-                        <?php if (PlatformForm::isPlatform1p0Ready($platform)): ?>
+                        <?php if (PlatformForm::isPlatform1p0Ready($platform)) : ?>
                             <span class="label label-success">LTI 1.0</span>
                         <?php endif; ?>
-                        <?php if ($tool->rsaKey && PlatformForm::isPlatform1p3Ready($platform)): ?>
+                        <?php if ($tool->rsaKey && PlatformForm::isPlatform1p3Ready($platform)) : ?>
                             <span class='label label-success'>LTI 1.3</span>
                         <?php endif; ?>
                     </div>
@@ -41,10 +41,10 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                     <div>
                         <?= Yii::t('lti', 'Status:') ?>
                         <span class="<?= $platform->getIsAvailable() ? 'text-success' : 'text-muted' ?>">
-                            <?php if ($platform->getIsAvailable()): ?>
+                            <?php if ($platform->getIsAvailable()) : ?>
                                 <span class="glyphicon glyphicon-play"></span>
                                 <strong><?= Yii::t('lti', 'Enabled') ?></strong>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <span class="glyphicon glyphicon-pause"></span>
                                 <?= Yii::t('lti', 'Disabled') ?>
                             <?php endif; ?>

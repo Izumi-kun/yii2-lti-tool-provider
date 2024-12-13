@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
                 <?= $form->field($model, 'newSecret')->checkbox() ?>
             </div>
         </div>
-        <?php if ($tool->rsaKey): ?>
+        <?php if ($tool->rsaKey) : ?>
             <div class='panel <?= PlatformForm::isPlatform1p3Ready($platform) ? 'panel-success' : 'panel-info' ?>'>
                 <div class='panel-heading'>
                     <strong>LTI 1.3</strong>
@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
     <div class="panel-footer">
         <?= Html::submitButton($isNew ? Yii::t('lti', 'Create') : Yii::t('lti', 'Update'), ['class' => $isNew ? 'btn btn-success' : 'btn btn-warning']) ?>
         <?= Html::a(Yii::t('lti', 'Cancel'), ['index'], ['class' => 'btn btn-default']) ?>
-        <?php if (!$isNew): ?>
+        <?php if (!$isNew) : ?>
             <div class="pull-right">
                 <?= Html::a(Yii::t('lti', 'Delete'), ['delete', 'id' => $id], [
                     'class' => 'btn btn-danger',
@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             <?= Yii::t('lti', 'Launch URL:') ?>
             <strong><?= Html::encode(Url::to(['tool/connect'], true)) ?></strong>
         </p>
-        <?php if ($tool->rsaKey): ?>
+        <?php if ($tool->rsaKey) : ?>
             <p>
                 <?= Yii::t('lti', 'Public keyset URL:') ?>
                 <strong><?= Html::encode($tool->jku) ?></strong>

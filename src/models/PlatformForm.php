@@ -218,7 +218,7 @@ class PlatformForm extends Model
         $platform->accessTokenUrl = $this->accessTokenUrl ?: null;
         try {
             $ok = $platform->save();
-        } catch (PDOException){
+        } catch (PDOException) {
             $this->addError('key');
             return false;
         }

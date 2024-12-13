@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/** @noinspection PhpUnused */
 
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
@@ -39,7 +40,7 @@ class PlatformController extends Controller
     public function actionIndex(): string
     {
         $platforms = Module::getInstance()->tool->getPlatforms();
-        usort($platforms, function (Platform $a, Platform $b){
+        usort($platforms, function (Platform $a, Platform $b) {
             return $a->getRecordId() > $b->getRecordId() ? 1 : -1;
         });
 
