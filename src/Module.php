@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/Izumi-kun/yii2-lti-tool-provider
- * @copyright Copyright (c) 2024 Viktor Khokhryakov
+ * @copyright Copyright (c) 2025 Viktor Khokhryakov
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
