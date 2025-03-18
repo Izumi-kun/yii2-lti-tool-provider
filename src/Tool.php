@@ -100,7 +100,7 @@ class Tool extends \ceLTIc\LTI\Tool implements Configurable
     /**
      * @param string $value HTML to be displayed on a successful completion of the request.
      */
-    public function setOutput(string $value)
+    public function setOutput(string $value): void
     {
         $this->output = $value;
     }
@@ -108,7 +108,7 @@ class Tool extends \ceLTIc\LTI\Tool implements Configurable
     /**
      * @param string $value HTML to be displayed on an unsuccessful completion of the request and no return URL is available.
      */
-    public function setErrorOutput(string $value)
+    public function setErrorOutput(string $value): void
     {
         $this->errorOutput = $value;
     }

@@ -165,7 +165,7 @@ class PlatformForm extends Model
         ];
     }
 
-    public function setPlatform(Platform $platform)
+    public function setPlatform(Platform $platform): void
     {
         $this->_platform = $platform;
         $this->key = $platform->getKey() ?: '';
