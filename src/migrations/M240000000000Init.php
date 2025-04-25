@@ -18,7 +18,7 @@ use yii\db\Migration;
  */
 class M240000000000Init extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -131,7 +131,7 @@ class M240000000000Init extends Migration
         $this->createIndex('lti2_share_key_resource_link_pk_IDX', $shareKey, 'resource_link_pk');
     }
 
-    public function down()
+    public function down(): void
     {
         $this->dropTable('{{%lti2_share_key}}');
         $this->dropTable('{{%lti2_user_result}}');

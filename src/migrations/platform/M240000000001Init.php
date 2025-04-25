@@ -18,7 +18,7 @@ use yii\db\Migration;
  */
 class M240000000001Init extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -47,7 +47,7 @@ class M240000000001Init extends Migration
         $this->createIndex('lti2_tool_initiate_login_url_UNIQUE', $tool, ['initiate_login_url'], true);
     }
 
-    public function down()
+    public function down(): void
     {
         $this->dropTable('{{%lti2_tool}}');
     }
