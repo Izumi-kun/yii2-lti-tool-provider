@@ -29,6 +29,37 @@ $this->title = $isNew ? Yii::t('lti', 'New LTI Platform') : Yii::t('lti', 'Platf
 $this->params['breadcrumbs'][] = ['label' => Yii::t('lti', 'LTI Platforms'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 
+$this->registerJs(<<<'JS'
+document.toggleSecretInputType = function () {
+  const input = document.getElementById("platformform-secret");
+  const icon = document.getElementById("secret-icon");
+  if (input.type === "password"){
+    input.type = "text";
+    icon.classList.remove("glyphicon-eye-open");
+    icon.classList.add("glyphicon-eye-close");
+  } else {
+    input.type = "password";
+    icon.classList.remove("glyphicon-eye-close");
+    icon.classList.add("glyphicon-eye-open");
+  }
+};
+JS
+);
+
+$secretTemplate = <<<TPL
+{label}
+<div class="input-group">
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" onclick="document.toggleSecretInputType()">
+            <span id="secret-icon" class="glyphicon glyphicon-eye-open"></span>
+        </button>
+    </span>
+    {input}
+</div>
+{hint}
+{error}
+TPL;
+
 ?>
 
 <?php $form = ActiveForm::begin() ?>
@@ -45,7 +76,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             </div>
             <div class='panel-body'>
                 <?= $form->field($model, 'key')->textInput() ?>
-                <?= $form->field($model, 'secret')->textInput() ?>
+                <?= $form->field($model, 'secret', ['template' => $secretTemplate])->passwordInput(['autocomplete' => 'off']) ?>
                 <?= $form->field($model, 'newSecret')->checkbox() ?>
             </div>
         </div>
