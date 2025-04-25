@@ -8,7 +8,8 @@
 use ceLTIc\LTI\Platform;
 use izumi\yii2lti\models\PlatformForm;
 use izumi\yii2lti\Module;
-use yii\helpers\Html;
+use yii\bootstrap\BootstrapAsset;
+use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\web\View;
 
@@ -17,6 +18,8 @@ use yii\web\View;
 
 $this->title = Yii::t('lti', 'LTI Platforms');
 $tool = Module::getInstance()->tool;
+
+BootstrapAsset::register($this);
 
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 

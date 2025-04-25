@@ -8,7 +8,8 @@
 use ceLTIc\LTI\Jwt\Jwt;
 use izumi\yii2lti\models\PlatformForm;
 use izumi\yii2lti\Module;
-use yii\helpers\Html;
+use yii\bootstrap\BootstrapAsset;
+use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\ActiveForm;
@@ -20,6 +21,8 @@ $tool = Module::getInstance()->tool;
 $platform = $model->getPlatform();
 $isNew = !$platform->created;
 $id = $platform->getRecordId();
+
+BootstrapAsset::register($this);
 
 $this->title = $isNew ? Yii::t('lti', 'New LTI Platform') : Yii::t('lti', 'Platform #{num}', ['num' => $id]);
 
